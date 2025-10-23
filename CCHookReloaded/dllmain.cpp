@@ -88,6 +88,9 @@ EMod InitializeMod()
 		media.dmgSounds[i] = DoSyscall(CG_S_REGISTERSOUND, soundName, qfalse);
 	}
 
+	ShaderSystem::Reset();
+	Shaders::Initialize();
+
 	media.pickupModels[0] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/multiplayer/ammopack/ammopack_pickup.md3"));
 	media.pickupModels[1] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/multiplayer/medpack/medpack_pickup.md3"));
 	media.pickupModels[2] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/multiplayer/supplies/healthbox_wm.md3"));
@@ -100,70 +103,78 @@ EMod InitializeMod()
 	media.pickupModels[9] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/fg42/fg42.md3"));
 	media.pickupModels[10] = DoSyscall(CG_R_REGISTERMODEL, XorString("models/multiplayer/mauser/mauser_pickup.md3"));
 
-	media.coverShader = eng::RegisterAndLoadShader(XorString(SHADER_COVER_SCRIPT), spoofSeed + 0);
-	media.plainShader = eng::RegisterAndLoadShader(XorString(SHADER_PLAIN_SCRIPT), spoofSeed + 1);
-	media.quadShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_SCRIPT), spoofSeed + 2);
-	media.crystalShader = eng::RegisterAndLoadShader(XorString(SHADER_CRYSTAL_SCRIPT), spoofSeed + 3);
-	media.plasticShader = eng::RegisterAndLoadShader(XorString(SHADER_PLASTIC_SCRIPT), spoofSeed + 4);
-	media.circleShader = eng::RegisterAndLoadShader(XorString(SHADER_CIRCLE_SCRIPT), spoofSeed + 5);
+    media.coverShader = ShaderSystem::GetShader("cover", spoofSeed);
+    media.plainShader = ShaderSystem::GetShader("plain", spoofSeed);
+    media.quadShader = ShaderSystem::GetShader("quad", spoofSeed);
+	media.crystalShader = ShaderSystem::GetShader("crystal", spoofSeed);
+	media.plasticShader = ShaderSystem::GetShader("plastic", spoofSeed);
+	media.circleShader = ShaderSystem::GetShader("circle", spoofSeed);
 
-	media.quadRedShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_RED_SCRIPT), spoofSeed + 6);
-	media.quadPurpleShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_PURPLE_SCRIPT), spoofSeed + 7);
-	media.quadMatrixBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_MATRIX_BLUE_SCRIPT), spoofSeed + 8);
-	media.quadBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_BLUE_SCRIPT), spoofSeed + 9);
-	media.quadGreenShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_GREEN_SCRIPT), spoofSeed + 10);
-	media.quadYellowShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_YELLOW_SCRIPT), spoofSeed + 11);
-	media.quadBrownShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_BROWN_SCRIPT), spoofSeed + 12);
-	media.quadCyanShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_CYAN_SCRIPT), spoofSeed + 13);
+	media.quadRedShader = ShaderSystem::GetShader("quadRed", spoofSeed);
+	media.quadPurpleShader = ShaderSystem::GetShader("quadPurple", spoofSeed);
+	media.quadMatrixBlueShader = ShaderSystem::GetShader("quadMatrixBlue", spoofSeed);
+	media.quadBlueShader = ShaderSystem::GetShader("quadBlue", spoofSeed);
+	media.quadGreenShader = ShaderSystem::GetShader("quadGreen", spoofSeed);
+	media.quadYellowShader = ShaderSystem::GetShader("quadYellow", spoofSeed);
+	media.quadBrownShader = ShaderSystem::GetShader("quadBrown", spoofSeed);
+	media.quadCyanShader = ShaderSystem::GetShader("quadCyan", spoofSeed);
 
-	media.oquadRedShader = eng::RegisterAndLoadShader(XorString(SHADER_OQUAD_RED_SCRIPT), spoofSeed + 14);
-	media.oquadBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_OQUAD_BLUE_SCRIPT), spoofSeed + 15);
-	media.omarbleShader = eng::RegisterAndLoadShader(XorString(SHADER_OMARBLE_SCRIPT), spoofSeed + 16);
-	media.ocrystalShader = eng::RegisterAndLoadShader(XorString(SHADER_OCRYSTAL_SCRIPT), spoofSeed + 17);
-	media.othermalShader = eng::RegisterAndLoadShader(XorString(SHADER_OTHERMAL_SCRIPT), spoofSeed + 18);
+	media.oquadRedShader = ShaderSystem::GetShader("oquadRed", spoofSeed);
+	media.oquadBlueShader = ShaderSystem::GetShader("oquadBlue", spoofSeed);
+	media.omarbleShader = ShaderSystem::GetShader("omarble", spoofSeed);
+	media.ocrystalShader = ShaderSystem::GetShader("ocrystal", spoofSeed);
+	media.othermalShader = ShaderSystem::GetShader("othermal", spoofSeed);
 
-	media.wquadRedShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_RED_SCRIPT), spoofSeed + 19);
-	media.wquadPurpleShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_PURPLE_SCRIPT), spoofSeed + 20);
-	media.wquadMatrixBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_MATRIX_BLUE_SCRIPT), spoofSeed + 21);
-	media.wquadBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_BLUE_SCRIPT), spoofSeed + 22);
-	media.wquadGreenShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_GREEN_SCRIPT), spoofSeed + 23);
-	media.wquadYellowShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_YELLOW_SCRIPT), spoofSeed + 24);
-	media.wquadBrownShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_BROWN_SCRIPT), spoofSeed + 25);
-	media.wquadCyanShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_CYAN_SCRIPT), spoofSeed + 26);
+	media.wquadRedShader = ShaderSystem::GetShader("wquadRed", spoofSeed);
+	media.wquadPurpleShader = ShaderSystem::GetShader("wquadPurple", spoofSeed);
+	media.wquadMatrixBlueShader = ShaderSystem::GetShader("wquadMatrixBlue", spoofSeed);
+	media.wquadBlueShader = ShaderSystem::GetShader("wquadBlue", spoofSeed);
+	media.wquadGreenShader = ShaderSystem::GetShader("wquadGreen", spoofSeed);
+	media.wquadYellowShader = ShaderSystem::GetShader("wquadYellow", spoofSeed);
+	media.wquadBrownShader = ShaderSystem::GetShader("wquadBrown", spoofSeed);
+	media.wquadCyanShader = ShaderSystem::GetShader("wquadCyan", spoofSeed);
 
-	media.keramicChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_KERAMIC_CHAMS_SCRIPT), spoofSeed + 27);
-	media.testChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_TEST_CHAMS_SCRIPT), spoofSeed + 28);
-	media.plasticChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_PLASTIC_CHAMS_SCRIPT), spoofSeed + 29);
-	media.crispWaveChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRISPWAVE_CHAMS_SCRIPT), spoofSeed + 30);
+	media.keramicChamsShader = ShaderSystem::GetShader("keramicChams", spoofSeed);
+	media.testChamsShader = ShaderSystem::GetShader("testChams", spoofSeed);
+	media.plasticChamsShader = ShaderSystem::GetShader("plasticChams", spoofSeed);
+	media.crispWaveChamsShader = ShaderSystem::GetShader("crispWaveChams", spoofSeed);
 
-	media.outChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_SCRIPT), spoofSeed + 31);
-	media.outChamsMarbleShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_MARBLE_SCRIPT), spoofSeed + 32);
-	media.outChamsCrystalShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_CRYSTAL_SCRIPT), spoofSeed + 33);
-	media.outChamsThermalShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_THERMAL_SCRIPT), spoofSeed + 34);
-	media.outChamsQuadShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_QUAD_SCRIPT), spoofSeed + 35);
-	media.outChamsPlasmaShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_PLASMA_SCRIPT), spoofSeed + 36);
-	media.outChamsPlasticShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_PLASTIC_SCRIPT), spoofSeed + 37);
+	media.outChamsShader = ShaderSystem::GetShader("outChams", spoofSeed);
+	media.outChamsMarbleShader = ShaderSystem::GetShader("outChamsMarble", spoofSeed);
+	media.outChamsCrystalShader = ShaderSystem::GetShader("outChamsCrystal", spoofSeed);
+	media.outChamsThermalShader = ShaderSystem::GetShader("outChamsThermal", spoofSeed);
+	media.outChamsQuadShader = ShaderSystem::GetShader("outChamsQuad", spoofSeed);
+	media.outChamsPlasmaShader = ShaderSystem::GetShader("outChamsPlasma", spoofSeed);
+	media.outChamsPlasticShader = ShaderSystem::GetShader("outChamsPlastic", spoofSeed);
 
-	media.crystalChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRYSTAL_CHAMS_SCRIPT), spoofSeed + 38);
-	media.glowChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_GLOW_CHAMS_SCRIPT), spoofSeed + 39);
-	media.flameChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_FLAME_CHAMS_SCRIPT), spoofSeed + 40);
-	media.solidAChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_SOLID_A_CHAMS_SCRIPT), spoofSeed + 41);
-	media.solidBChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_SOLID_B_CHAMS_SCRIPT), spoofSeed + 42);
+	media.crystalChamsShader = ShaderSystem::GetShader("crystalChams", spoofSeed);
+	media.glowChamsShader = ShaderSystem::GetShader("glowChams", spoofSeed);
+	media.flameChamsShader = ShaderSystem::GetShader("flameChams", spoofSeed);
+	media.solidAChamsShader = ShaderSystem::GetShader("solidAChams", spoofSeed);
+	media.solidBChamsShader = ShaderSystem::GetShader("solidBChams", spoofSeed);
 
-	media.quadAChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_A_CHAMS_SCRIPT), spoofSeed + 43);
-	media.quadBChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_B_CHAMS_SCRIPT), spoofSeed + 44);
-	media.quadCChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_C_CHAMS_SCRIPT), spoofSeed + 45);
-	media.quadDChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_D_CHAMS_SCRIPT), spoofSeed + 46);
-	
-	media.matrixChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_MATRIX_CHAMS_SCRIPT), spoofSeed + 47);
-	media.thermalChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_THERMAL_CHAMS_SCRIPT), spoofSeed + 48);
-	media.crystalBChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRYSTAL_B_CHAMS_SCRIPT), spoofSeed + 49);
-	media.xrayChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_XRAY_CHAMS_SCRIPT), spoofSeed + 50);
-	media.gridChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_GRID_CHAMS_SCRIPT), spoofSeed + 51);
-	media.waveChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_WAVE_CHAMS_SCRIPT), spoofSeed + 52);
-	media.crispyChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRISPY_CHAMS_SCRIPT), spoofSeed + 53);
-	media.marbleChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_MARBLE_CHAMS_SCRIPT), spoofSeed + 54);
-	media.plasmaChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_PLASMA_CHAMS_SCRIPT), spoofSeed + 55);
+	media.quadAChamsShader = ShaderSystem::GetShader("quadAChams", spoofSeed);
+	media.quadBChamsShader = ShaderSystem::GetShader("quadBChams", spoofSeed);
+	media.quadCChamsShader = ShaderSystem::GetShader("quadCChams", spoofSeed);
+	media.quadDChamsShader = ShaderSystem::GetShader("quadDChams", spoofSeed);
+
+	media.matrixChamsShader = ShaderSystem::GetShader("matrixChams", spoofSeed);
+	media.thermalChamsShader = ShaderSystem::GetShader("thermalChams", spoofSeed);
+	media.crystalBChamsShader = ShaderSystem::GetShader("crystalBChams", spoofSeed);
+	media.xrayChamsShader = ShaderSystem::GetShader("xrayChams", spoofSeed);
+	media.gridChamsShader = ShaderSystem::GetShader("gridChams", spoofSeed);
+	media.waveChamsShader = ShaderSystem::GetShader("waveChams", spoofSeed);
+	media.crispyChamsShader = ShaderSystem::GetShader("crispyChams", spoofSeed);
+	media.marbleChamsShader = ShaderSystem::GetShader("marbleChams", spoofSeed);
+	media.plasmaChamsShader = ShaderSystem::GetShader("plasmaChams", spoofSeed);
+
+	media.railCoreShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("railCore"));
+	media.onFireShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("entityOnFire1"));
+	media.reticleShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("gfx/misc/reticlesimple.tga"));
+	media.binocShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("gfx/misc/binocsimple.tga"));
+	media.nullShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("gfx/2d/nullshader.tga"));
+	media.smokepuffShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("smokePuff"));
+	media.whiteShader = DoSyscall(CG_R_REGISTERSHADER, XorString("white"));
 
 	media.railCoreShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("railCore"));
 	media.onFireShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("entityOnFire1"));
