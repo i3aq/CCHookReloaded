@@ -2,19 +2,35 @@
 
 struct SConfig
 {
-	// General
 	const char *pakName = "cch";
 
-
-	// Chams
+	// Pickup Chams (Med & Ammo Packs)
 	bool pickupChams = true;
-	vec4_t pickupVisRGBA = { 0, 255, 0, 0 };
-	vec4_t pickupInvRGBA = { 0,  40, 0, 0 };
+	bool pickupChamsFillWallhack = false;
+	bool pickupChamsOutline = true;
+	bool pickupChamsOutlineWallhack = true;
+	vec4_t colorHealth = { 230, 0, 255, 255 };
+	vec4_t colorHealthOutline = { 255, 255, 255, 255 };
+	vec4_t colorAmmo = { 0, 0, 255, 255 };
+	vec4_t colorAmmoOutline = { 255, 255, 255, 255 };
 
+	// Dropped Weapon Chams
+	bool droppedWeaponChams = true;
+	bool droppedWeaponChamsFillWallhack = false;
+	bool droppedWeaponChamsOutline = true;
+	bool droppedWeaponChamsOutlineWallhack = true;
+	vec4_t colorWorldWeapons = { 0, 255, 0, 255 };
+	vec4_t colorWorldWeaponsOutline = { 255, 255, 255, 255 };
+
+	qhandle_t& itemshader1 = media.glowChamsShader;
+	qhandle_t& itemshader2 = media.ocrystalShader;
+
+	// Missile Chams
 	bool missileChams = true;
 	vec4_t missileVisRGBA = { 255, 0, 0, 0 };
 	vec4_t missileInvRGBA = {  80, 0, 0, 0 };
 
+	// Player Chams
 	bool playerChams = true;
 	bool playerOutlineChams = false;
 	bool playerCorpseChams = true;
@@ -22,6 +38,14 @@ struct SConfig
 	vec4_t playerInvulnRGBA = { 255, 0, 255, 0 };
 	qhandle_t& playerShader = media.coverShader;
 
+	// Held Weapon Chams
+	bool heldWeaponChams = true;
+	bool weaponChamsShader1Wallhack = false;
+	bool weaponChamsShader2Wallhack = true;
+	vec4_t colorTeamWeapon = { 255, 255, 0, 255 };
+	vec4_t colorTeamWeaponOutline = { 0, 255, 255, 255 };
+	qhandle_t& weaponshader1 = media.glowChamsShader;
+	qhandle_t& weaponshader2 = media.ocrystalShader;
 
 	// Visuals
 	// bool scopedWalk = true; Removed for now
@@ -48,7 +72,7 @@ struct SConfig
 
 	// Aimbot
 	bool aimbotEnabled = true;
-	int  aimbotAimkey = VK_LBUTTON;
+	int  aimbotAimkey = VK_XBUTTON2; // Change using the list above
 	bool aimbotStickyAim = true;
 	bool aimbotStickyAutoReset = true;
 	bool aimbotLockViewangles = true;

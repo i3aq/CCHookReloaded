@@ -195,7 +195,6 @@ namespace ui
 			{
 				const uint8_t newColorChar = *(s + 1);
 
-				// Do not copy alpha value ever again, only initialized once
 				if(newColorChar == COLOR_NULL)
 					VectorCopy(color, newColor);
 				else
@@ -264,7 +263,7 @@ namespace ui
 		DoSyscall(CG_R_SETCOLOR, nullptr);
 	}
 
-	void DrawButton(float x, float y, float w, float h, const char *text, std::function<void()> callback, int *currentTab = nullptr, int myTab = 0)
+	void DrawButton(float x, float y, float w, float h, const char *text, float textScale, std::function<void()> callback, int *currentTab = nullptr, int myTab = 0)
 	{
 		const bool IsHovering = cgDC_cursorx >= x && cgDC_cursorx < x + w &&
 								cgDC_cursory >= y && cgDC_cursory < y + h;
@@ -290,7 +289,7 @@ namespace ui
 			: 0;
 
 		DrawBoxBordered2D(x, y, w, h, bgColor, boColor, media.whiteShader);
-		DrawText(x + w/2.0f, y + h/2.0f, 0.14f, 0.14f, colorWhite, 
+		DrawText(x + w/2.0f, y + h/2.0f, textScale, textScale, colorWhite, 
 			text, 0.0f, 0, flags, ITEM_ALIGN_CENTER2, &media.limboFont2);
 
 		if (IsHovering && (btnMouseL & 1))
@@ -302,117 +301,146 @@ namespace ui
 				callback();
 		}
 	}
-	void DrawCheckbox(float x, float y, const char *text, bool *state)
+	void DrawCheckbox(float x, float y, const char *text, bool *state, float scale)
 	{
-		float textW, textH;
-		SizeText(0.14f, 0.14f, text, 0, &media.limboFont2, &textW, &textH);
+		const float baseTextScale = 0.14f;
+		const float baseBoxSize = 9.0f;
+		
+		const float currentTextScale = baseTextScale * scale;
+		const float currentBoxSize = baseBoxSize * scale;
 
-		const int w = 9, h = 9;
-		const bool IsHovering = cgDC_cursorx >= x && cgDC_cursorx < (x + w + 2.0f + textW) &&
-								cgDC_cursory >= y && cgDC_cursory < y + h;
+		float textW, textH;
+		SizeText(currentTextScale, currentTextScale, text, 0, &media.limboFont2, &textW, &textH);
+
+		const bool IsHovering = cgDC_cursorx >= x && cgDC_cursorx < (x + currentBoxSize + 2.0f + textW) &&
+								cgDC_cursory >= y && cgDC_cursory < y + currentBoxSize;
 		const vec_t *color = IsHovering ? colorCheckboxHl : colorCheckbox;
 
-		DrawBox2D(x, y, w, h, color, *state ? media.checkboxChecked : media.checkboxUnchecked);
-		DrawText(x + w + 2.0f, y + h/2 - textH/2 + 0.5, 0.14f, 0.14f, color, text, 0.0f, 0, 0, ITEM_ALIGN_LEFT, &media.limboFont2);
+		DrawBox2D(x, y, currentBoxSize, currentBoxSize, color, *state ? media.checkboxChecked : media.checkboxUnchecked);
+		DrawText(x + currentBoxSize + (2.0f * scale), y + currentBoxSize/2.0f - textH/2.0f + 0.5f, currentTextScale, currentTextScale, color, text, 0.0f, 0, 0, ITEM_ALIGN_LEFT, &media.limboFont2);
 
 		if (IsHovering && (btnMouseL & 1))
 			*state ^= 1;
 	}
 	void DrawMenu()
 	{
-		const int menuSizeX = 245;
-		const int menuSizeY = 150;
-		const int menuX = 320 - menuSizeX/2;
-		const int menuY = 240 - menuSizeY/2;
-
-		static int currentTab = 0;
-
-		// DoSyscall(CG_KEY_ISDOWN, K_MOUSE1)?
 		btnDelete = GetAsyncKeyState(VK_DELETE);
 		btnMouseL = GetAsyncKeyState(VK_LBUTTON);
-
-		DrawBoxedText(10.0f, 10.0f, 0.16f, 0.16f, colorWhite, XorString("^1CC^7Hook^1:^9Reloaded"), 
-			0.0f, 0, ITEM_TEXTSTYLE_NORMAL, ITEM_ALIGN_LEFT, &media.limboFont1, colorMenuBg, colorMenuBo);
 
 		if ((btnDelete & 1) && !(DoSyscall(CG_KEY_GETCATCHER) & (KEYCATCH_CONSOLE | KEYCATCH_UI)))
 		{
 			showMenu = !showMenu;
 
-			// Disable user input block and mouse capturing
 			if (!showMenu)
 				DoSyscall(CG_KEY_SETCATCHER, DoSyscall(CG_KEY_GETCATCHER) & ~(KEYCATCH_MESSAGE | KEYCATCH_CGAME));
 		}
 
 		if (!showMenu)
+		{
+			DrawBoxedText(10.0f, 10.0f, 0.16f, 0.16f, colorWhite, XorString("^1CC^7Hook^1:^9Reloaded"), 
+				0.0f, 0, ITEM_TEXTSTYLE_NORMAL, ITEM_ALIGN_LEFT, &media.limboFont1, colorMenuBg, colorMenuBo);
 			return;
+		}
 
-		// Block user input for CGame and capture mouse move events
 		DoSyscall(CG_KEY_SETCATCHER, DoSyscall(CG_KEY_GETCATCHER) | KEYCATCH_CGAME | KEYCATCH_MESSAGE);
 
+		const vec4_t background = { 0.0f, 0.0f, 0.0f, 0.7f };
+		DrawBox2D(0, 0, 640, 480, background, media.whiteShader);
 
-		DrawBoxBordered2D(menuX, menuY, menuSizeX, menuSizeY, colorMenuBg, colorMenuBo, media.whiteShader);
-		DrawBox2D(menuX, menuY, menuSizeX, 12.0f, colorMenuBg, media.whiteShader);
-		DrawText(menuX + menuSizeX/2.0f, menuY + 3.5f, 0.16f, 0.16f, colorWhite, 
-			XorString("^1CC^7Hook^1:^9Reloaded"), 0.0f, 0, ITEM_TEXTSTYLE_OUTLINED, ITEM_ALIGN_CENTER, &media.limboFont1);
-		DrawBox2D(menuX, menuY + 12, menuSizeX, 0.5f, colorMenuBo, media.whiteShader);
+		DrawText(320.0f, 25.0f, 0.3f, 0.3f, colorWhite, 
+			XorString("^1CC^7Hook^1:^9Reloaded"), 0.0f, 0, ITEM_TEXTSTYLE_SHADOWED, ITEM_ALIGN_CENTER, &media.limboFont1);
 
-		DrawButton(menuX + 5,   menuY + 17, 55, 10, XorString("Aimbot"), nullptr, &currentTab, 0);
-		DrawButton(menuX + 65,  menuY + 17, 55, 10, XorString("Visuals"), nullptr, &currentTab, 1);
-		DrawButton(menuX + 125, menuY + 17, 55, 10, XorString("ESP"), nullptr, &currentTab, 2);
-		DrawButton(menuX + 185, menuY + 17, 55, 10, XorString("Misc"), nullptr, &currentTab, 3);
+		static int currentTab = 0;
+		const float tabWidth = 55.0f * 1.5f;
+		const float tabHeight = 10.0f * 1.5f;
+		const float tabTextScale = 0.14f * 1.5f;
+		const float tabY = 50.0f;
+		const float tabGap = 5.0f;
+		float currentTabX = 143.5f;
 
-		DrawBoxBordered2D(menuX + 5, menuY + 31, menuSizeX - 10, menuSizeY - 35, colorMenuBg, colorMenuBo, media.whiteShader);
+		DrawButton(currentTabX, tabY, tabWidth, tabHeight, XorString("Aimbot"), tabTextScale, nullptr, &currentTab, 0);
+		currentTabX += tabWidth + tabGap;
+		DrawButton(currentTabX, tabY, tabWidth, tabHeight, XorString("Visuals"), tabTextScale, nullptr, &currentTab, 1);
+		currentTabX += tabWidth + tabGap;
+		DrawButton(currentTabX, tabY, tabWidth, tabHeight, XorString("ESP"), tabTextScale, nullptr, &currentTab, 2);
+		currentTabX += tabWidth + tabGap;
+		DrawButton(currentTabX, tabY, tabWidth, tabHeight, XorString("Misc"), tabTextScale, nullptr, &currentTab, 3);
+
+		const float contentX = 100.0f;
+		const float contentY = 100.0f;
+		const float checkboxScale = 1.25f;
+		const float verticalSpacing = 15.0f;
+		float currentY;
 
 		switch (currentTab)
 		{
-		case 0: // Aimbot
-			DrawCheckbox(menuX + 10, menuY + 35, XorString("Aimbot Enabled"), &cfg.aimbotEnabled);
-			DrawCheckbox(menuX + 10, menuY + 45, XorString("Sticky Aim"), &cfg.aimbotStickyAim);
-			DrawCheckbox(menuX + 10, menuY + 55, XorString("Sticky Auto-Reset"), &cfg.aimbotStickyAutoReset);
-			DrawCheckbox(menuX + 10, menuY + 65, XorString("Lock Viewangles"), &cfg.aimbotLockViewangles);
-			DrawCheckbox(menuX + 10, menuY + 75, XorString("Autoshoot"), &cfg.aimbotAutoshoot);
-			DrawCheckbox(menuX + 10, menuY + 85, XorString("Autocrouch"), &cfg.aimbotAutoCrouch);
-			DrawCheckbox(menuX + 10, menuY + 95, XorString("Velocity Prediction"), &cfg.aimbotVelocityPrediction);
-			DrawCheckbox(menuX + 10, menuY + 105, XorString("Ping Prediction"), &cfg.aimbotPingPrediction);
-			DrawCheckbox(menuX + 10, menuY + 115, XorString("Human Aim"), &cfg.aimbotHumanAim);
-			break;
-		case 1: // Visuals
-			// DrawCheckbox(menuX + 10, menuY + 35, XorString("Scoped Walk"), &cfg.scopedWalk);
-			DrawCheckbox(menuX + 10, menuY + 35, XorString("No Scope-FoV"), &cfg.noScopeFov);
-			DrawCheckbox(menuX + 10, menuY + 45, XorString("No Scope-Blackout"), &cfg.noScopeBlackout);
-			DrawCheckbox(menuX + 10, menuY + 55, XorString("Bullet Tracers"), &cfg.bulletTracers);
-			DrawCheckbox(menuX + 10, menuY + 65, XorString("Grenade Trajectory"), &cfg.grenadeTrajectory);
-			DrawCheckbox(menuX + 10, menuY + 75, XorString("No Damage Feedback"), &cfg.noDamageFeedback);
-			DrawCheckbox(menuX + 10, menuY + 85, XorString("No Camera Shake"), &cfg.noCamExplosionShake);
-			DrawCheckbox(menuX + 10, menuY + 95, XorString("No Smoke"), &cfg.noSmoke);
-			DrawCheckbox(menuX + 10, menuY + 105, XorString("No Foliage"), &cfg.noFoliage);
-			DrawCheckbox(menuX + 10, menuY + 115, XorString("No Weather"), &cfg.noWeather);
+			case 0: // Aimbot
+				currentY = contentY;
+				DrawCheckbox(contentX, currentY, XorString("Aimbot Enabled"), &cfg.aimbotEnabled, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Sticky Aim"), &cfg.aimbotStickyAim, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Sticky Auto-Reset"), &cfg.aimbotStickyAutoReset, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Lock Viewangles"), &cfg.aimbotLockViewangles, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Autoshoot"), &cfg.aimbotAutoshoot, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Autocrouch"), &cfg.aimbotAutoCrouch, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Velocity Prediction"), &cfg.aimbotVelocityPrediction, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Ping Prediction"), &cfg.aimbotPingPrediction, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Human Aim"), &cfg.aimbotHumanAim, checkboxScale);
+				break;
+			case 1: // Visuals
+				{
+					const float column2X = contentX + 250.0f;
+					float currentY_col1 = contentY;
+					float currentY_col2 = contentY;
 
-			DrawCheckbox(menuX + 120, menuY + 35, XorString("Pickup Chams"), &cfg.pickupChams);
-			DrawCheckbox(menuX + 120, menuY + 45, XorString("Missile Chams"), &cfg.missileChams);
-			DrawCheckbox(menuX + 120, menuY + 55, XorString("Player Chams"), &cfg.playerChams);
-			DrawCheckbox(menuX + 120, menuY + 65, XorString("Player Outline"), &cfg.playerOutlineChams);
-			DrawCheckbox(menuX + 120, menuY + 75, XorString("Player Corpse"), &cfg.playerCorpseChams);
-			break;
-		case 2: // ESP
-			DrawCheckbox(menuX + 10, menuY + 35, XorString("Head BBox"), &cfg.headBbox);
-			DrawCheckbox(menuX + 10, menuY + 45, XorString("Body BBox"), &cfg.bodyBbox);
-			DrawCheckbox(menuX + 10, menuY + 55, XorString("Bone ESP"), &cfg.boneEsp);
-			DrawCheckbox(menuX + 10, menuY + 65, XorString("Name ESP"), &cfg.nameEsp);
-			DrawCheckbox(menuX + 10, menuY + 75, XorString("Missile ESP"), &cfg.missileEsp);
-			DrawCheckbox(menuX + 10, menuY + 85, XorString("Missile Radius"), &cfg.missileRadius);
-			DrawCheckbox(menuX + 10, menuY + 95, XorString("Pickup ESP"), &cfg.pickupEsp);
-			break;
-		case 3: // Misc
-			DrawCheckbox(menuX + 10, menuY + 35, XorString("Spectator Warning"), &cfg.spectatorWarning);
-			DrawCheckbox(menuX + 10, menuY + 45, XorString("Enemy Spawntimer"), &cfg.enemySpawnTimer);
-			DrawCheckbox(menuX + 10, menuY + 55, XorString("Custom Damage Sounds"), &cfg.customDmgSounds);
-			DrawCheckbox(menuX + 10, menuY + 65, XorString("Quick Unban-Reconnect (F10)"), &cfg.quickUnbanReconnect);
-			DrawCheckbox(menuX + 10, menuY + 75, XorString("Clean Screenshots"), &cfg.cleanScreenshots);
-			DrawCheckbox(menuX + 10, menuY + 85, XorString("CVAR Unlocker (Caution)"), &cfg.cvarUnlocker);
-			DrawCheckbox(menuX + 10, menuY + 95, XorString("PicMip Hack (Visible on Screenshots)"), &cfg.picmipHack);
-			DrawCheckbox(menuX + 10, menuY + 105, XorString("Bunny Hop"), &cfg.bunnyHop);
-			break;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Scope-FoV"), &cfg.noScopeFov, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Scope-Blackout"), &cfg.noScopeBlackout, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("Bullet Tracers"), &cfg.bulletTracers, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("Grenade Trajectory"), &cfg.grenadeTrajectory, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Damage Feedback"), &cfg.noDamageFeedback, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Camera Shake"), &cfg.noCamExplosionShake, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Smoke"), &cfg.noSmoke, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Foliage"), &cfg.noFoliage, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("No Weather"), &cfg.noWeather, checkboxScale); currentY_col1 += verticalSpacing;
+					DrawCheckbox(contentX, currentY_col1, XorString("Missile Chams"), &cfg.missileChams, checkboxScale);
+					
+					DrawCheckbox(column2X, currentY_col2, XorString("Player Chams"), &cfg.playerChams, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline"), &cfg.playerOutlineChams, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Corpse"), &cfg.playerCorpseChams, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
+					
+					DrawCheckbox(column2X, currentY_col2, XorString("Pickup Chams"), &cfg.pickupChams, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Fill Wallhack"), &cfg.pickupChamsFillWallhack, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline"), &cfg.pickupChamsOutline, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline Wallhack"), &cfg.pickupChamsOutlineWallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
+
+					DrawCheckbox(column2X, currentY_col2, XorString("Dropped Wep Chams"), &cfg.droppedWeaponChams, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Fill Wallhack"), &cfg.droppedWeaponChamsFillWallhack, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline"), &cfg.droppedWeaponChamsOutline, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline Wallhack"), &cfg.droppedWeaponChamsOutlineWallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
+
+					DrawCheckbox(column2X, currentY_col2, XorString("Held Weapon Chams"), &cfg.heldWeaponChams, checkboxScale);
+				}
+				break;
+			case 2: // ESP
+				currentY = contentY;
+				DrawCheckbox(contentX, currentY, XorString("Head BBox"), &cfg.headBbox, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Body BBox"), &cfg.bodyBbox, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Bone ESP"), &cfg.boneEsp, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Name ESP"), &cfg.nameEsp, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Missile ESP"), &cfg.missileEsp, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Missile Radius"), &cfg.missileRadius, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Pickup ESP"), &cfg.pickupEsp, checkboxScale);
+				break;
+			case 3: // Misc
+				currentY = contentY;
+				DrawCheckbox(contentX, currentY, XorString("Spectator Warning"), &cfg.spectatorWarning, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Enemy Spawntimer"), &cfg.enemySpawnTimer, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Custom Damage Sounds"), &cfg.customDmgSounds, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Quick Unban-Reconnect (F10)"), &cfg.quickUnbanReconnect, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Clean Screenshots"), &cfg.cleanScreenshots, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("CVAR Unlocker (Caution)"), &cfg.cvarUnlocker, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("PicMip Hack (Visible on Screenshots)"), &cfg.picmipHack, checkboxScale); currentY += verticalSpacing;
+				DrawCheckbox(contentX, currentY, XorString("Bunny Hop"), &cfg.bunnyHop, checkboxScale);
+				break;
 		}
 
 		ui::DrawBox2D(cgDC_cursorx, cgDC_cursory, 32, 32, colorWhite, media.cursorIcon);

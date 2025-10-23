@@ -7,11 +7,28 @@ struct SMedia
 	qhandle_t pickupModels[11];
 	qhandle_t grassModels[3];
 	qhandle_t weatherSprites[3];
+
 	qhandle_t whiteShader, coverShader, plainShader, quadShader, crystalShader, plasticShader,
 		onFireShader, railCoreShader, reticleShader, binocShader, nullShader,
 		smokepuffShader, circleShader;
+
+	qhandle_t quadRedShader, quadPurpleShader, quadMatrixBlueShader, quadBlueShader,
+		quadGreenShader, quadYellowShader, quadBrownShader, quadCyanShader, oquadRedShader,
+		oquadBlueShader, omarbleShader, ocrystalShader, othermalShader, wquadRedShader,
+		wquadPurpleShader, wquadMatrixBlueShader, wquadBlueShader, wquadGreenShader,
+		wquadYellowShader, wquadBrownShader, wquadCyanShader, keramicChamsShader,
+		testChamsShader, plasticChamsShader, crispWaveChamsShader, outChamsShader,
+		outChamsMarbleShader, outChamsCrystalShader, outChamsThermalShader,
+		outChamsQuadShader, outChamsPlasmaShader, outChamsPlasticShader,
+		crystalChamsShader, glowChamsShader, flameChamsShader, solidAChamsShader,
+		solidBChamsShader, quadAChamsShader, quadBChamsShader, quadCChamsShader,
+		quadDChamsShader, matrixChamsShader, thermalChamsShader, crystalBChamsShader,
+		xrayChamsShader, gridChamsShader, waveChamsShader, crispyChamsShader,
+		marbleChamsShader, plasmaChamsShader;
+
 	qhandle_t landmineIcon, dynamiteIcon, smokeIcon, grenadeIcon, pineappleIcon, 
 		satchelIcon, medkitIcon, ammoIcon, mp40Icon, thompsonIcon, stenIcon, fg42Icon;
+
 	qhandle_t cursorIcon, checkboxChecked, checkboxUnchecked;
 };
 inline SMedia media;

@@ -107,6 +107,64 @@ EMod InitializeMod()
 	media.plasticShader = eng::RegisterAndLoadShader(XorString(SHADER_PLASTIC_SCRIPT), spoofSeed + 4);
 	media.circleShader = eng::RegisterAndLoadShader(XorString(SHADER_CIRCLE_SCRIPT), spoofSeed + 5);
 
+	media.quadRedShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_RED_SCRIPT), spoofSeed + 6);
+	media.quadPurpleShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_PURPLE_SCRIPT), spoofSeed + 7);
+	media.quadMatrixBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_MATRIX_BLUE_SCRIPT), spoofSeed + 8);
+	media.quadBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_BLUE_SCRIPT), spoofSeed + 9);
+	media.quadGreenShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_GREEN_SCRIPT), spoofSeed + 10);
+	media.quadYellowShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_YELLOW_SCRIPT), spoofSeed + 11);
+	media.quadBrownShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_BROWN_SCRIPT), spoofSeed + 12);
+	media.quadCyanShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_CYAN_SCRIPT), spoofSeed + 13);
+
+	media.oquadRedShader = eng::RegisterAndLoadShader(XorString(SHADER_OQUAD_RED_SCRIPT), spoofSeed + 14);
+	media.oquadBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_OQUAD_BLUE_SCRIPT), spoofSeed + 15);
+	media.omarbleShader = eng::RegisterAndLoadShader(XorString(SHADER_OMARBLE_SCRIPT), spoofSeed + 16);
+	media.ocrystalShader = eng::RegisterAndLoadShader(XorString(SHADER_OCRYSTAL_SCRIPT), spoofSeed + 17);
+	media.othermalShader = eng::RegisterAndLoadShader(XorString(SHADER_OTHERMAL_SCRIPT), spoofSeed + 18);
+
+	media.wquadRedShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_RED_SCRIPT), spoofSeed + 19);
+	media.wquadPurpleShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_PURPLE_SCRIPT), spoofSeed + 20);
+	media.wquadMatrixBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_MATRIX_BLUE_SCRIPT), spoofSeed + 21);
+	media.wquadBlueShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_BLUE_SCRIPT), spoofSeed + 22);
+	media.wquadGreenShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_GREEN_SCRIPT), spoofSeed + 23);
+	media.wquadYellowShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_YELLOW_SCRIPT), spoofSeed + 24);
+	media.wquadBrownShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_BROWN_SCRIPT), spoofSeed + 25);
+	media.wquadCyanShader = eng::RegisterAndLoadShader(XorString(SHADER_WQUAD_CYAN_SCRIPT), spoofSeed + 26);
+
+	media.keramicChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_KERAMIC_CHAMS_SCRIPT), spoofSeed + 27);
+	media.testChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_TEST_CHAMS_SCRIPT), spoofSeed + 28);
+	media.plasticChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_PLASTIC_CHAMS_SCRIPT), spoofSeed + 29);
+	media.crispWaveChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRISPWAVE_CHAMS_SCRIPT), spoofSeed + 30);
+
+	media.outChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_SCRIPT), spoofSeed + 31);
+	media.outChamsMarbleShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_MARBLE_SCRIPT), spoofSeed + 32);
+	media.outChamsCrystalShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_CRYSTAL_SCRIPT), spoofSeed + 33);
+	media.outChamsThermalShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_THERMAL_SCRIPT), spoofSeed + 34);
+	media.outChamsQuadShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_QUAD_SCRIPT), spoofSeed + 35);
+	media.outChamsPlasmaShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_PLASMA_SCRIPT), spoofSeed + 36);
+	media.outChamsPlasticShader = eng::RegisterAndLoadShader(XorString(SHADER_OUT_CHAMS_PLASTIC_SCRIPT), spoofSeed + 37);
+
+	media.crystalChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRYSTAL_CHAMS_SCRIPT), spoofSeed + 38);
+	media.glowChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_GLOW_CHAMS_SCRIPT), spoofSeed + 39);
+	media.flameChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_FLAME_CHAMS_SCRIPT), spoofSeed + 40);
+	media.solidAChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_SOLID_A_CHAMS_SCRIPT), spoofSeed + 41);
+	media.solidBChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_SOLID_B_CHAMS_SCRIPT), spoofSeed + 42);
+
+	media.quadAChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_A_CHAMS_SCRIPT), spoofSeed + 43);
+	media.quadBChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_B_CHAMS_SCRIPT), spoofSeed + 44);
+	media.quadCChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_C_CHAMS_SCRIPT), spoofSeed + 45);
+	media.quadDChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_QUAD_D_CHAMS_SCRIPT), spoofSeed + 46);
+	
+	media.matrixChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_MATRIX_CHAMS_SCRIPT), spoofSeed + 47);
+	media.thermalChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_THERMAL_CHAMS_SCRIPT), spoofSeed + 48);
+	media.crystalBChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRYSTAL_B_CHAMS_SCRIPT), spoofSeed + 49);
+	media.xrayChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_XRAY_CHAMS_SCRIPT), spoofSeed + 50);
+	media.gridChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_GRID_CHAMS_SCRIPT), spoofSeed + 51);
+	media.waveChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_WAVE_CHAMS_SCRIPT), spoofSeed + 52);
+	media.crispyChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_CRISPY_CHAMS_SCRIPT), spoofSeed + 53);
+	media.marbleChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_MARBLE_CHAMS_SCRIPT), spoofSeed + 54);
+	media.plasmaChamsShader = eng::RegisterAndLoadShader(XorString(SHADER_PLASMA_CHAMS_SCRIPT), spoofSeed + 55);
+
 	media.railCoreShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("railCore"));
 	media.onFireShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("entityOnFire1"));
 	media.reticleShader = DoSyscall(CG_R_REGISTERSHADERNOMIP, XorString("gfx/misc/reticlesimple.tga"));
@@ -544,30 +602,131 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 
 		if (disableRendering)
 			break;
+
+		if (cfg.heldWeaponChams && (ent.renderfx & RF_FIRST_PERSON))
+		{
+			DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+
+			refEntity_t chamsEnt = ent;
+
+			// Layer 1 (Fill)
+			if (cfg.weaponshader1)
+			{
+				if (cfg.weaponChamsShader1Wallhack)
+				{
+					chamsEnt.renderfx |= RF_DEPTHHACK;
+				}
+				else
+				{
+					chamsEnt.renderfx &= ~RF_DEPTHHACK;
+				}
+				chamsEnt.customShader = cfg.weaponshader1;
+				Vector4Copy(cfg.colorTeamWeapon, chamsEnt.shaderRGBA);
+				DoSyscall(CG_R_ADDREFENTITYTOSCENE, &chamsEnt);
+			}
+
+			// Layer 2 (Outline)
+			if (cfg.weaponshader2)
+			{
+				if (cfg.weaponChamsShader2Wallhack)
+				{
+					chamsEnt.renderfx |= RF_DEPTHHACK;
+				}
+				else
+				{
+					chamsEnt.renderfx &= ~RF_DEPTHHACK;
+				}
+				chamsEnt.customShader = cfg.weaponshader2;
+				Vector4Copy(cfg.colorTeamWeaponOutline, chamsEnt.shaderRGBA);
+				return DoSyscall(CG_R_ADDREFENTITYTOSCENE, &chamsEnt);
+			}
+			return 0;
+		}
+
 		if (ent.reType != RT_MODEL)
 			break;
-
-		if (cfg.pickupChams)
+		
+		// Med & Ammo Pack Chams
+		bool isMedPack = ent.hModel == media.pickupModels[1];
+		bool isAmmoPack = ent.hModel == media.pickupModels[0];
+		
+		if (cfg.pickupChams && (isMedPack || isAmmoPack))
 		{
-			// For pickup items, entityNum is always the playerID. Check hModel instead.
-
-			for (size_t i = 0; i < std::size(media.pickupModels); i++)
+			// Layer 1 (Fill)
+			refEntity_t fillEnt = ent;
+			if (cfg.pickupChamsFillWallhack)
 			{
-				if (ent.hModel != media.pickupModels[i])
-					continue;
-
-				const bool isVisible = eng::IsPointVisible(cg_refdef.vieworg, ent.origin, cg_snapshot.ps.clientNum);
-
-				ent.renderfx |=  isVisible ? RF_DEPTHHACK : 0;
-				DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
-
-				ent.customShader = media.coverShader;
-				Vector4Copy(isVisible ? cfg.pickupVisRGBA : cfg.pickupInvRGBA, ent.shaderRGBA);
-				ent.renderfx |=  RF_DEPTHHACK | RF_NOSHADOW;
-				if (isVisible) ent.renderfx &= ~RF_DEPTHHACK;
-
-				return DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+				fillEnt.renderfx |= RF_DEPTHHACK;
 			}
+			else
+			{
+				fillEnt.renderfx &= ~RF_DEPTHHACK;
+			}
+
+			fillEnt.customShader = cfg.itemshader1;
+			if (isMedPack) Vector4Copy(cfg.colorHealth, fillEnt.shaderRGBA);
+			else if (isAmmoPack) Vector4Copy(cfg.colorAmmo, fillEnt.shaderRGBA);
+			
+			DoSyscall(CG_R_ADDREFENTITYTOSCENE, &fillEnt);
+
+			// Layer 2 (Outline)
+			if (cfg.pickupChamsOutline) 
+			{
+				if (cfg.pickupChamsOutlineWallhack)
+				{
+					ent.renderfx |= RF_DEPTHHACK;
+				}
+				else
+				{
+					ent.renderfx &= ~RF_DEPTHHACK;
+				}
+
+				ent.customShader = cfg.itemshader2;
+				if (isMedPack) Vector4Copy(cfg.colorHealthOutline, ent.shaderRGBA);
+				else if (isAmmoPack) Vector4Copy(cfg.colorAmmoOutline, ent.shaderRGBA);
+			}
+			return DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+		}
+
+		// Dropped Weapon Chams
+		bool isDroppedWeapon = ent.hModel == media.pickupModels[7] || // thompson
+							   ent.hModel == media.pickupModels[6] || // mp40
+							   ent.hModel == media.pickupModels[8];   // sten
+
+		if (cfg.droppedWeaponChams && isDroppedWeapon)
+		{
+			// Layer 1 (Fill)
+			refEntity_t fillEnt = ent;
+			if (cfg.droppedWeaponChamsFillWallhack)
+			{
+				fillEnt.renderfx |= RF_DEPTHHACK;
+			}
+			else
+			{
+				fillEnt.renderfx &= ~RF_DEPTHHACK;
+			}
+
+			fillEnt.customShader = cfg.itemshader1;
+			Vector4Copy(cfg.colorWorldWeapons, fillEnt.shaderRGBA);
+			
+			DoSyscall(CG_R_ADDREFENTITYTOSCENE, &fillEnt);
+
+			// Layer 2 (Outline)
+			if (cfg.droppedWeaponChamsOutline) 
+			{
+				if (cfg.droppedWeaponChamsOutlineWallhack)
+				{
+					ent.renderfx |= RF_DEPTHHACK;
+				}
+				else
+				{
+					ent.renderfx &= ~RF_DEPTHHACK;
+				}
+
+				ent.customShader = cfg.itemshader2;
+				Vector4Copy(cfg.colorWorldWeaponsOutline, ent.shaderRGBA);
+			}
+			return DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
 		}
 
 		if (cfg.missileChams)
@@ -579,7 +738,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 				ent.renderfx |= isVisible ? RF_DEPTHHACK : 0;
 				DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
 
-				ent.customShader = media.coverShader;
+				ent.customShader = media.wquadGreenShader;
 				Vector4Copy(isVisible ? cfg.missileVisRGBA : cfg.missileInvRGBA, ent.shaderRGBA);
 				ent.renderfx |= RF_DEPTHHACK | RF_NOSHADOW;
 				if (isVisible) ent.renderfx &= ~RF_DEPTHHACK;
@@ -1182,8 +1341,9 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 				if (cg_snapshot.ps.persistant[PERS_HITS] - totalDamage > 0)
 					DoSyscall(CG_S_STARTLOCALSOUND, media.hitSounds[serverTime % std::size(media.hitSounds)], CHAN_LOCAL_SOUND, 100);
 
-				totalDamage = cg_snapshot.ps.persistant[PERS_HITS];
+				totalDamage = cg_snapshot.ps.persistant[PERS_HITS]; //TODO: find an alternative to PERS_HITS for etlegacy
 			}
+			
 			
 			static int lastHealth = 0;
 			if (cg_snapshot.ps.pm_type == PM_NORMAL && !(cg_snapshot.ps.eFlags & EF_DEAD) &&
@@ -1541,58 +1701,85 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 				bool isTargetValid = false;
 
 				// Sticky aim should be disabled default when no aimkey is set
-                if ((cfg.aimbotStickyAim && g_aimTargetId == -1) || !cfg.aimbotStickyAim || cfg.aimbotAimkey == 0)
-                {
-                    int found = GetAimTarget(aimPos, true, true);
-                    if (found != -1)
-                    {
-                        isTargetValid = true;
-                        g_aimTargetId = found;
-                        VectorCopy(aimPos, g_lastAimPos);
-                    }
-                    else
-                    {
-                        found = GetAimTarget(aimPos, true, false);
-                        if (found != -1)
-                        {
-                            isTargetValid = true;
-                            g_aimTargetId = found;
-                            VectorCopy(aimPos, g_lastAimPos);
-                        }
-                    }
-                }
-                else
-                {
-                    vec3_t tmpAim;
-                    if ((isTargetValid = GetAimPos(cgs_clientinfo[g_aimTargetId], tmpAim, true, true)))
-                    {
-                        VectorCopy(tmpAim, g_lastAimPos);
-                    }
-                    else if ((isTargetValid = GetAimPos(cgs_clientinfo[g_aimTargetId], tmpAim, true, false)))
-                    {
-                        VectorCopy(tmpAim, g_lastAimPos);
-                    }
-                    else if (cfg.aimbotStickyAutoReset)
-                    {
-                        int found = GetAimTarget(aimPos, true, true);
-                        if (found != -1)
-                        {
-                            isTargetValid = true;
-                            g_aimTargetId = found;
-                            VectorCopy(aimPos, g_lastAimPos);
-                        }
-                        else
-                        {
-                            found = GetAimTarget(aimPos, true, false);
-                            if (found != -1)
-                            {
-                                isTargetValid = true;
-                                g_aimTargetId = found;
-                                VectorCopy(aimPos, g_lastAimPos);
-                            }
-                        }
-                    }
-                }
+				if (cfg.aimbotStickyAim && g_aimTargetId != -1)
+				{
+					vec3_t tmpAim;
+					auto& ci = cgs_clientinfo[g_aimTargetId];
+					float distance = VectorDistance(cg_refdef.vieworg, ci.interOrigin);
+					bool aimForHead = (distance <= 4250.0f) || cg_iszoomed;
+
+					if (aimForHead)
+					{
+						if (GetAimPos(ci, tmpAim, true, true))
+						{
+							isTargetValid = true;
+						}
+						else if (GetAimPos(ci, tmpAim, true, false))
+						{
+							isTargetValid = true;
+						}
+					}
+					else
+					{
+						if (GetAimPos(ci, tmpAim, true, false))
+						{
+							isTargetValid = true;
+						}
+						else if (GetAimPos(ci, tmpAim, true, true))
+						{
+							isTargetValid = true;
+						}
+					}
+
+					if (isTargetValid)
+					{
+						VectorCopy(tmpAim, g_lastAimPos);
+					}
+					else if (cfg.aimbotStickyAutoReset)
+					{
+						g_aimTargetId = -1;
+					}
+				}
+
+				if (g_aimTargetId == -1)
+				{
+					int found = -1;
+
+					vec3_t head_aimPos;
+					int head_target = GetAimTarget(head_aimPos, true, true);
+					
+					bool head_target_is_valid = false;
+					if (head_target != -1)
+					{
+						auto& ci = cgs_clientinfo[head_target];
+
+						float distance = VectorDistance(cg_refdef.vieworg, ci.interOrigin);
+						if (distance <= 3500.0f || cg_iszoomed)
+						{
+							head_target_is_valid = true;
+						}
+					}
+
+					vec3_t body_aimPos;
+					int body_target = GetAimTarget(body_aimPos, true, false);
+					
+					if (head_target_is_valid)
+					{
+						found = head_target;
+						VectorCopy(head_aimPos, aimPos);
+					} else if (body_target != -1)
+					{
+						found = body_target;
+						VectorCopy(body_aimPos, aimPos);
+					}
+
+					if (found != -1)
+					{
+						isTargetValid = true;
+						g_aimTargetId = found;
+						VectorCopy(aimPos, g_lastAimPos);
+					}
+				}
 
                 if (isTargetValid && (lockViewangles = eng::AimAtTarget(g_lastAimPos)))
                 {
@@ -1799,8 +1986,9 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 					{
 						const vec4_t& color = eng::IsPointVisible(cg_refdef.vieworg, predictedPos, cg_snapshot.ps.clientNum) ? colorYellow : colorRed;
 
-						//ui::DrawLine3D(lastPredictedPos, predictedPos, 2.0f, color);
-						draw3dCommands.emplace_back(lastPredictedPos, predictedPos, color, RF_DEPTHHACK);
+						//draw3dCommands.emplace_back(lastPredictedPos, predictedPos, color, RF_DEPTHHACK);
+						ui::DrawLine3D(lastPredictedPos, predictedPos, 2.0f, color);
+						// We use this now to prevent trajectory lines from breaking
 					}
 
 					VectorCopy(predictedPos, lastPredictedPos);
