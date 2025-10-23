@@ -24,7 +24,7 @@ struct SConfig
 
 
 	// Visuals
-	bool scopedWalk = true;
+	// bool scopedWalk = true; Removed for now
 	bool noScopeFov = false;
 	bool noScopeBlackout = true;
 	bool bulletTracers = false;
@@ -35,10 +35,20 @@ struct SConfig
 	bool noFoliage = true;
 	bool noWeather = true;
 
+	/* Key list for aimbotAimkey:
+
+	 * VK_LBUTTON		(Left Mouse / Mouse1)
+	 * VK_RBUTTON		(Right Mouse / Mouse2)
+	 * VK_MBUTTON		(Middle Mouse / Mouse3 / Scroll Wheel Click)
+	 * VK_XBUTTON1		(Side Button / Mouse4)
+	 * VK_XBUTTON2		(Side Button / Mouse5)
+	 * 0				(No Aimkey - Aimbot always on)
+
+	*/	
 
 	// Aimbot
 	bool aimbotEnabled = true;
-	int  aimbotAimkey = VK_LBUTTON; // 0 = No Aimkey
+	int  aimbotAimkey = VK_LBUTTON;
 	bool aimbotStickyAim = true;
 	bool aimbotStickyAutoReset = true;
 	bool aimbotLockViewangles = true;
@@ -54,6 +64,8 @@ struct SConfig
 	float aimbotHeadBoxTraceStep = 0.5f;
 	float aimbotBodyBoxTraceStep = 0.3f;
 	float aimbotHeadHeightOffset = 0.0f; // -5.0f aims roughly at the neck
+	bool aimbotAutoCrouch = true;
+	float aimbotAutoCrouchOffset = 21.0f;
 
 
 	// Spoofer

@@ -371,21 +371,22 @@ namespace ui
 			DrawCheckbox(menuX + 10, menuY + 55, XorString("Sticky Auto-Reset"), &cfg.aimbotStickyAutoReset);
 			DrawCheckbox(menuX + 10, menuY + 65, XorString("Lock Viewangles"), &cfg.aimbotLockViewangles);
 			DrawCheckbox(menuX + 10, menuY + 75, XorString("Autoshoot"), &cfg.aimbotAutoshoot);
-			DrawCheckbox(menuX + 10, menuY + 85, XorString("Velocity Prediction"), &cfg.aimbotVelocityPrediction);
-			DrawCheckbox(menuX + 10, menuY + 95, XorString("Ping Prediction"), &cfg.aimbotPingPrediction);
-			DrawCheckbox(menuX + 10, menuY + 105, XorString("Human Aim"), &cfg.aimbotHumanAim);
+			DrawCheckbox(menuX + 10, menuY + 85, XorString("Autocrouch"), &cfg.aimbotAutoCrouch);
+			DrawCheckbox(menuX + 10, menuY + 95, XorString("Velocity Prediction"), &cfg.aimbotVelocityPrediction);
+			DrawCheckbox(menuX + 10, menuY + 105, XorString("Ping Prediction"), &cfg.aimbotPingPrediction);
+			DrawCheckbox(menuX + 10, menuY + 115, XorString("Human Aim"), &cfg.aimbotHumanAim);
 			break;
 		case 1: // Visuals
-			DrawCheckbox(menuX + 10, menuY + 35, XorString("Scoped Walk"), &cfg.scopedWalk);
-			DrawCheckbox(menuX + 10, menuY + 45, XorString("No Scope-FoV"), &cfg.noScopeFov);
-			DrawCheckbox(menuX + 10, menuY + 55, XorString("No Scope-Blackout"), &cfg.noScopeBlackout);
-			DrawCheckbox(menuX + 10, menuY + 65, XorString("Bullet Tracers"), &cfg.bulletTracers);
-			DrawCheckbox(menuX + 10, menuY + 75, XorString("Grenade Trajectory"), &cfg.grenadeTrajectory);
-			DrawCheckbox(menuX + 10, menuY + 85, XorString("No Damage Feedback"), &cfg.noDamageFeedback);
-			DrawCheckbox(menuX + 10, menuY + 95, XorString("No Camera Shake"), &cfg.noCamExplosionShake);
-			DrawCheckbox(menuX + 10, menuY + 105, XorString("No Smoke"), &cfg.noSmoke);
-			DrawCheckbox(menuX + 10, menuY + 115, XorString("No Foliage"), &cfg.noFoliage);
-			DrawCheckbox(menuX + 10, menuY + 125, XorString("No Weather"), &cfg.noWeather);
+			// DrawCheckbox(menuX + 10, menuY + 35, XorString("Scoped Walk"), &cfg.scopedWalk);
+			DrawCheckbox(menuX + 10, menuY + 35, XorString("No Scope-FoV"), &cfg.noScopeFov);
+			DrawCheckbox(menuX + 10, menuY + 45, XorString("No Scope-Blackout"), &cfg.noScopeBlackout);
+			DrawCheckbox(menuX + 10, menuY + 55, XorString("Bullet Tracers"), &cfg.bulletTracers);
+			DrawCheckbox(menuX + 10, menuY + 65, XorString("Grenade Trajectory"), &cfg.grenadeTrajectory);
+			DrawCheckbox(menuX + 10, menuY + 75, XorString("No Damage Feedback"), &cfg.noDamageFeedback);
+			DrawCheckbox(menuX + 10, menuY + 85, XorString("No Camera Shake"), &cfg.noCamExplosionShake);
+			DrawCheckbox(menuX + 10, menuY + 95, XorString("No Smoke"), &cfg.noSmoke);
+			DrawCheckbox(menuX + 10, menuY + 105, XorString("No Foliage"), &cfg.noFoliage);
+			DrawCheckbox(menuX + 10, menuY + 115, XorString("No Weather"), &cfg.noWeather);
 
 			DrawCheckbox(menuX + 120, menuY + 35, XorString("Pickup Chams"), &cfg.pickupChams);
 			DrawCheckbox(menuX + 120, menuY + 45, XorString("Missile Chams"), &cfg.missileChams);

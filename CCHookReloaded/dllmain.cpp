@@ -49,6 +49,8 @@ uint8_t etpro_rollingkey[8];
 
 std::vector<SDraw3dCommand> draw3dCommands;
 
+static int g_aimTargetId = -1;
+static vec3_t g_lastAimPos = { 0.0f, 0.0f, 0.0f };
 
 EMod InitializeMod()
 {
@@ -835,9 +837,11 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 			if (cfg.noDamageFeedback)
 				snapshot->ps.damageEvent = 0;
 
+			/*
 			// Avoid zoomed sniper from switching weapon when moving too fast
 			if (cfg.scopedWalk && cg_iszoomed)
-				VectorClear(snapshot->ps.velocity);
+				VectorClear(snapshot->ps.velocity); Removed for now
+			*/
 
 			memset(cg_missiles, 0, sizeof(cg_missiles));
 
@@ -1396,19 +1400,17 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 			}
 		}
 
-
 		// Aimbot
 		if (cfg.aimbotEnabled)
 		{
 			lockViewangles = false;
 
-			static int aimTargetId = -1;
-			bool enableAimbot = (hitscanWeaponBitmap & (1ull << cg_snapshot.ps.weapon)) && 
-				cfg.aimbotAimkey == 0 ? true : (GetKeyState(cfg.aimbotAimkey) & 0x8000) && !showMenu;
+			bool enableAimbot = (hitscanWeaponBitmap & (1ull << cg_snapshot.ps.weapon)) &&
+				(cfg.aimbotAimkey == 0 ? true : (GetKeyState(cfg.aimbotAimkey) & 0x8000)) && !showMenu;
 
 			if (!enableAimbot)
 			{
-				aimTargetId = -1;
+				g_aimTargetId = -1;
 			}
 			else
 			{
@@ -1539,41 +1541,79 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 				bool isTargetValid = false;
 
 				// Sticky aim should be disabled default when no aimkey is set
-				if ((cfg.aimbotStickyAim && aimTargetId == -1) || !cfg.aimbotStickyAim || cfg.aimbotAimkey == 0)
-				{
-					isTargetValid = (aimTargetId = GetAimTarget(aimPos, true, true)) != -1;
-					if (!isTargetValid)
-						isTargetValid = (aimTargetId = GetAimTarget(aimPos, true, false)) != -1;
-				}
-				else
-				{
-					if (!(isTargetValid = GetAimPos(cgs_clientinfo[aimTargetId], aimPos, true, true)))
-						isTargetValid = GetAimPos(cgs_clientinfo[aimTargetId], aimPos, true, false);
+                if ((cfg.aimbotStickyAim && g_aimTargetId == -1) || !cfg.aimbotStickyAim || cfg.aimbotAimkey == 0)
+                {
+                    int found = GetAimTarget(aimPos, true, true);
+                    if (found != -1)
+                    {
+                        isTargetValid = true;
+                        g_aimTargetId = found;
+                        VectorCopy(aimPos, g_lastAimPos);
+                    }
+                    else
+                    {
+                        found = GetAimTarget(aimPos, true, false);
+                        if (found != -1)
+                        {
+                            isTargetValid = true;
+                            g_aimTargetId = found;
+                            VectorCopy(aimPos, g_lastAimPos);
+                        }
+                    }
+                }
+                else
+                {
+                    vec3_t tmpAim;
+                    if ((isTargetValid = GetAimPos(cgs_clientinfo[g_aimTargetId], tmpAim, true, true)))
+                    {
+                        VectorCopy(tmpAim, g_lastAimPos);
+                    }
+                    else if ((isTargetValid = GetAimPos(cgs_clientinfo[g_aimTargetId], tmpAim, true, false)))
+                    {
+                        VectorCopy(tmpAim, g_lastAimPos);
+                    }
+                    else if (cfg.aimbotStickyAutoReset)
+                    {
+                        int found = GetAimTarget(aimPos, true, true);
+                        if (found != -1)
+                        {
+                            isTargetValid = true;
+                            g_aimTargetId = found;
+                            VectorCopy(aimPos, g_lastAimPos);
+                        }
+                        else
+                        {
+                            found = GetAimTarget(aimPos, true, false);
+                            if (found != -1)
+                            {
+                                isTargetValid = true;
+                                g_aimTargetId = found;
+                                VectorCopy(aimPos, g_lastAimPos);
+                            }
+                        }
+                    }
+                }
 
-					if (!isTargetValid && cfg.aimbotStickyAutoReset)
-					{
-						isTargetValid = (aimTargetId = GetAimTarget(aimPos, true, true)) != -1;
-						if (!isTargetValid)
-							isTargetValid = (aimTargetId = GetAimTarget(aimPos, true, false)) != -1;
-					}
-				}
+                if (isTargetValid && (lockViewangles = eng::AimAtTarget(g_lastAimPos)))
+                {
+                    // Autoshoot
+                    if (cfg.aimbotAutoshoot)
+                    {
+                        DoSyscall(CG_SENDCONSOLECOMMAND, XorString("+attack\n-attack\n"));
+                    }
+                }
+                else
+                {
+                    g_aimTargetId = -1;
+                }
+            }
+        }
+        else
+        {
+            g_aimTargetId = -1;
+        }
 
-				if (isTargetValid && (lockViewangles = eng::AimAtTarget(aimPos)))
-				{
-					// Autoshoot
-					if (cfg.aimbotAutoshoot)
-					{
-						//// Works too but why require another offset if we can just inject a console command?
-						//kbutton_t *kb = off::cur.kbuttons();
-						//kb[KB_DOWN].active = 1;
-						//kb[KB_BUTTONS0].wasPressed = 1;
-
-						DoSyscall(CG_SENDCONSOLECOMMAND, XorString("+attack\n-attack\n"));
-					}
-				}
-			}
-		}
-
+        eng::HandleAutoCrouch(lockViewangles, g_lastAimPos, g_aimTargetId);
 
 		// Rifle and Grenade trajectory
 		if (cfg.grenadeTrajectory && !cg_iszoomed)

@@ -13,8 +13,8 @@ Modify `config.h` to your liking. Many of the config values cannot be changed at
 Copy `cch.pk3` into your `etmain` folder and make sure to rename it. Set the new name in the config (`pakName`) without the `.pk3` extension.
 Ensure that `USE_DEBUG` macro is not defined in `pch.h` if you don't want to debug the cheat. This will significantly lower detection risk.
 Compile the project (Visual Studio 2022, Windows 10 SDK). It will yield 2 binaries in the ``Release`` output folder:
-- `CCHookReloaded.dll`: actual cheat DLL which has to be injected into the game
-- `CCHookReloaded.exe`: LdrLoadDll injector to start the game and inject the DLL
+- `RenameMe.dll`: actual cheat DLL which has to be injected into the game
+- `RenameMe.exe`: LdrLoadDll injector to start the game and inject the DLL
 
 **Please make sure to rename both files before launching the injector to avoid anti-cheat detections!**
   

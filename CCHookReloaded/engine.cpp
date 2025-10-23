@@ -319,6 +319,41 @@ namespace eng
 
 		return false;
 	}
+	void HandleAutoCrouch(bool lockViewangles, const vec3_t& aimPos, int aimTargetId)
+	{
+		static bool wasCrouching = false;
+
+		if (!cfg.aimbotAutoCrouch)
+		{
+			if (wasCrouching)
+			{
+				DoSyscall(CG_SENDCONSOLECOMMAND, "-movedown\n");
+				wasCrouching = false;
+			}
+			return;
+		}
+
+		const bool isSprinting = (GetAsyncKeyState(VK_LSHIFT) & 0x8000);
+		const bool isPlayerManuallyCrouching = (cg_snapshot.ps.pm_flags & PMF_DUCKED);
+
+		if (lockViewangles && !wasCrouching && !isSprinting && !isPlayerManuallyCrouching && !cg_iszoomed)
+		{
+			vec3_t crouchedViewOrg;
+			VectorCopy(cg_refdef.vieworg, crouchedViewOrg);
+			crouchedViewOrg[2] -= cfg.aimbotAutoCrouchOffset;
+
+			if (eng::IsPointVisible(crouchedViewOrg, aimPos, aimTargetId))
+			{
+				DoSyscall(CG_SENDCONSOLECOMMAND, "+movedown\n");
+				wasCrouching = true;
+			}
+		}
+		else if (wasCrouching && (!lockViewangles || isSprinting))
+		{
+			DoSyscall(CG_SENDCONSOLECOMMAND, "-movedown\n");
+			wasCrouching = false;
+		}
+	}
 	bool IsKeyActionActive(const char *action)
 	{
 		int key1, key2;

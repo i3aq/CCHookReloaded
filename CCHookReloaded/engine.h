@@ -8,9 +8,11 @@ namespace eng
 	void CG_BuildSolidList();
 	void CG_ClipMoveToEntities(const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask, int capsule, trace_t* tr);
 	void CG_Trace(trace_t *result, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int skipNumber, int mask);
+
 	bool IsPointVisible(const vec3_t start, const vec3_t pt, int skipNumber);
 	bool IsBoxVisible(const vec3_t start, const vec3_t mins, const vec3_t maxs, float step, vec3_t visOut, int skipNumber);
 	bool AimAtTarget(const vec3_t target);
+	void HandleAutoCrouch(bool lockViewangles, const vec3_t& aimPos, int aimTargetId);
 	bool IsKeyActionActive(const char *action);
 	hitbox_t GetHeadHitbox(const SClientInfo &ci);
 	bool IsEntityArmed(const entityState_t* entState);
