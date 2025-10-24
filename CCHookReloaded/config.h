@@ -120,6 +120,7 @@ struct SConfig
 	bool missileEsp = true;
 	bool missileRadius = false;
 	bool pickupEsp = true;
+	vec4_t colorPickupEsp = { 255, 255, 255, 255 };
 	float maxEspDistance = FLT_MAX;
 };
 
