@@ -1516,17 +1516,15 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 
 				if (ent.weapon == WP_LANDMINE && eng::IsEntityArmed(&ent))
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.landmineIcon);
-				else if (ent.weapon == WP_DYNAMITE) // MOD_DYNAMITE
+				else if (ent.weapon == WP_DYNAMITE)
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.dynamiteIcon);
-				else if (ent.weapon == WP_SMOKE_BOMB) // MOD_SMOKEBOMB // TODO: Fix for etlegacy
+				else if (ent.weapon == WP_SMOKE_BOMB)
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.smokeIcon);
-				else if (ent.weapon == WP_SMOKE_MARKER) // MOD_AIRSTRIKE
-					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.smokeIcon);
-				else if (ent.weapon == WP_GRENADE_PINEAPPLE) // MOD_GRENADE_PINEAPPLE
+				else if (ent.weapon == WP_GRENADE_PINEAPPLE)
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.pineappleIcon);
-				else if (ent.weapon == WP_GRENADE_LAUNCHER) // MOD_GRENADE_LAUNCHER
+				else if (ent.weapon == WP_GRENADE_LAUNCHER)
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.grenadeIcon);
-				else if (ent.weapon == WP_SATCHEL) // MOD_SATCHEL
+				else if (ent.weapon == WP_SATCHEL)
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.satchelIcon);
 
 				// Draw detonation timer for dynamite
@@ -1549,7 +1547,6 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 					const vec3_t dir = { 0, 0, -1 };
 					draw3dCommands.emplace_back(cgEnt.origin, dir, colorRed, media.circleShader, 260.0f);
 				}
-				// TODO: Add timer for grenades
 			}
 			else if(cfg.pickupEsp && ent.eType == ET_ITEM)
 			{
@@ -1560,17 +1557,17 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 				// TODO: Do not hardcode model indices.
 				// Pickup items use the playerID for entityNum in ADDREFENTITYTOSCENE instead.
 				if (ent.modelindex == 3)
-					ui::DrawIcon(x, y, 15.0f, 15.0f, cfg.colorPickupEsp, media.medkitIcon);
+					ui::DrawIcon(x, y, 15.0f, 15.0f, colorGreen, media.medkitIcon);
 				else if (ent.modelindex == 33)
-					ui::DrawIcon(x, y, 15.0f, 15.0f, cfg.colorPickupEsp, media.ammoIcon);
+					ui::DrawIcon(x, y, 15.0f, 15.0f, colorGreen, media.ammoIcon);
 				else if (ent.modelindex == 19)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.colorPickupEsp, media.mp40Icon);
+					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.mp40Icon);
 				else if (ent.modelindex == 13)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.colorPickupEsp, media.thompsonIcon);
+					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.thompsonIcon);
 				else if (ent.modelindex == 15)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.colorPickupEsp, media.stenIcon);
+					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.stenIcon);
 				else if (ent.modelindex == 44)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.colorPickupEsp, media.fg42Icon);
+					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.fg42Icon);
 			}
 		}
 
