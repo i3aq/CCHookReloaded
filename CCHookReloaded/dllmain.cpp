@@ -52,15 +52,51 @@ std::vector<SDraw3dCommand> draw3dCommands;
 static int g_aimTargetId = -1;
 static vec3_t g_lastAimPos = { 0.0f, 0.0f, 0.0f };
 
+struct SItemModelIndices
+{
+    int medkit;
+    int ammo;
+    int mp40;
+    int thompson;
+    int sten;
+    int fg42;
+};
+
+static std::unordered_map<EMod, SItemModelIndices> g_modItemIndices;
+
+const SItemModelIndices& GetCurrentModIndices()
+{
+    auto it = g_modItemIndices.find(currentMod);
+    if (it != g_modItemIndices.end())
+    {
+        return it->second;
+    }
+    return g_modItemIndices.at(EMod::EtMain);
+}
+
 EMod InitializeMod()
 {
+	if (g_modItemIndices.empty())
+    {
+        // Fallback onto legacy mod indices by default since its one of the most commonly played mods
+        g_modItemIndices[EMod::EtMain] = { 2, 36, 20, 13, 15, 47 };
+
+        // Use -1 as a placeholder for unknown indices
+        g_modItemIndices[EMod::JayMod]    = { /*medkit*/3, /*ammo*/39, /*mp40*/22, /*thompson*/14, /*sten*/18, /*fg42*/49 };
+        g_modItemIndices[EMod::NoQuarter] = { /*medkit*/17, /*ammo*/46, /*mp40*/22, /*thompson*/27, /*sten*/28, /*fg42*/78 }; // NoQuarter replaced the fg42 with the BAR
+        g_modItemIndices[EMod::Silent]    = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44 };
+        g_modItemIndices[EMod::Nitmod]    = { /*medkit*/2, /*ammo*/32, /*mp40*/18, /*thompson*/12, /*sten*/14, /*fg42*/44 };
+        g_modItemIndices[EMod::Legacy]    = { /*medkit*/2, /*ammo*/36, /*mp40*/20, /*thompson*/13, /*sten*/15, /*fg42*/47 };
+        g_modItemIndices[EMod::EtPub]     = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44 };
+        g_modItemIndices[EMod::EtPro]     = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44 };
+    }
+
 	char modName[MAX_PATH+1];
 	EMod mod = tools::GetETMod(modName);
 	printf(XorString("Detected mod: %s (%i)\n"), modName, mod);
 
 	// Unlock PAK before we load all of its media
 	tools::UnlockPak();
-
 
 	// Disable annoying camera bob
 	DoSyscall(CG_CVAR_SET, XorString("cg_bobPitch"), XorString("0"));
@@ -1514,17 +1550,19 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 				if (!ui::WorldToScreen(cgEnt.origin, &x, &y))
 					continue;
 
-				if (ent.weapon == WP_LANDMINE && eng::IsEntityArmed(&ent))
+				if (ent.weapon == WP_LANDMINE && eng::IsEntityArmed(&ent)) // MOD_LANDMINE
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.landmineIcon);
-				else if (ent.weapon == WP_DYNAMITE)
+				else if (ent.weapon == WP_DYNAMITE) // MOD_DYNAMITE
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.dynamiteIcon);
-				else if (ent.weapon == WP_SMOKE_BOMB)
+				else if (ent.weapon == WP_SMOKE_BOMB) // MOD_SMOKEBOMB // TODO: Fix for etlegacy
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.smokeIcon);
-				else if (ent.weapon == WP_GRENADE_PINEAPPLE)
+				else if (ent.weapon == WP_SMOKE_MARKER) // MOD_AIRSTRIKE
+					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.smokeIcon);
+				else if (ent.weapon == WP_GRENADE_PINEAPPLE) // MOD_GRENADE_PINEAPPLE
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.pineappleIcon);
-				else if (ent.weapon == WP_GRENADE_LAUNCHER)
+				else if (ent.weapon == WP_GRENADE_LAUNCHER) // MOD_GRENADE_LAUNCHER
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.grenadeIcon);
-				else if (ent.weapon == WP_SATCHEL)
+				else if (ent.weapon == WP_SATCHEL) // MOD_SATCHEL
 					ui::DrawIcon(x, y, 15.0f, 15.0f, colorRed, media.satchelIcon);
 
 				// Draw detonation timer for dynamite
@@ -1554,20 +1592,30 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 				if (!ui::WorldToScreen(cgEnt.origin, &x, &y))
 					continue;
 
-				// TODO: Do not hardcode model indices.
+					const SItemModelIndices& indices = GetCurrentModIndices();
+
+					/*
+					printf("Item found - Model Index: %d\n", ent.modelindex); 
+
+					Use this to find model indices for items, you must render the models you want the indices for in game
+					For example if you drop a medpack or ammopack on the ground you will see it print the indices in the console
+					It will always print ANY models from the modelindex that are currently being rendered from your pov
+					Make sure you define USE_DEBUG in pch.h first
+					*/
+
 				// Pickup items use the playerID for entityNum in ADDREFENTITYTOSCENE instead.
-				if (ent.modelindex == 3)
-					ui::DrawIcon(x, y, 15.0f, 15.0f, colorGreen, media.medkitIcon);
-				else if (ent.modelindex == 33)
-					ui::DrawIcon(x, y, 15.0f, 15.0f, colorGreen, media.ammoIcon);
-				else if (ent.modelindex == 19)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.mp40Icon);
-				else if (ent.modelindex == 13)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.thompsonIcon);
-				else if (ent.modelindex == 15)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.stenIcon);
-				else if (ent.modelindex == 44)
-					ui::DrawIcon(x, y, 30.0f, 15.0f, colorGreen, media.fg42Icon);
+				if (ent.modelindex == indices.medkit)
+					ui::DrawIcon(x, y, 15.0f, 15.0f, cfg.iconEspColor, media.medkitIcon);
+				else if (ent.modelindex == indices.ammo)
+					ui::DrawIcon(x, y, 15.0f, 15.0f, cfg.iconEspColor, media.ammoIcon);
+				else if (ent.modelindex == indices.mp40)
+					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.mp40Icon);
+				else if (ent.modelindex == indices.thompson)
+					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.thompsonIcon);
+				else if (ent.modelindex == indices.sten)
+					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.stenIcon);
+				else if (ent.modelindex == indices.fg42)
+					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.fg42Icon);
 			}
 		}
 
