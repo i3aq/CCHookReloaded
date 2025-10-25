@@ -398,6 +398,7 @@ namespace ui
 					float currentY_col3 = contentY;
 
 					// Left column
+					DrawCheckbox(contentX, currentY_col1, XorString("Scoped Walk"), &cfg.scopedWalk, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("No Scope-FoV"), &cfg.noScopeFov, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("No Scope-Blackout"), &cfg.noScopeBlackout, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("Bullet Tracers"), &cfg.bulletTracers, checkboxScale); currentY_col1 += verticalSpacing;

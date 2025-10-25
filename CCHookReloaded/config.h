@@ -68,8 +68,8 @@ struct SConfig
 	qhandle_t& weaponshader2 = media.ocrystalShader;
 
 	// Visuals
-	// bool scopedWalk = true; Removed for now
-	bool noScopeFov = false;
+	bool scopedWalk = true;
+	bool noScopeFov = true;
 	bool noScopeBlackout = true;
 	bool bulletTracers = false;
 	bool grenadeTrajectory = true;

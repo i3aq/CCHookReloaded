@@ -1089,11 +1089,11 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 			if (cfg.noDamageFeedback)
 				snapshot->ps.damageEvent = 0;
 
-			/*
+			
 			// Avoid zoomed sniper from switching weapon when moving too fast
 			if (cfg.scopedWalk && cg_iszoomed)
-				VectorClear(snapshot->ps.velocity); Removed for now
-			*/
+				VectorClear(snapshot->ps.velocity);
+			
 
 			memset(cg_missiles, 0, sizeof(cg_missiles));
 
