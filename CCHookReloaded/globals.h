@@ -4,7 +4,7 @@ struct SMedia
 {
 	fontInfo_t limboFont1, limboFont2;
 	qhandle_t hitSounds[4], dmgSounds[4];
-	qhandle_t pickupModels[11];
+	qhandle_t pickupModels[12];
 	qhandle_t grassModels[3];
 	qhandle_t weatherSprites[3];
 
@@ -27,7 +27,8 @@ struct SMedia
 		marbleChamsShader, plasmaChamsShader;
 
 	qhandle_t landmineIcon, dynamiteIcon, smokeIcon, grenadeIcon, pineappleIcon, 
-		satchelIcon, medkitIcon, ammoIcon, mp40Icon, thompsonIcon, stenIcon, fg42Icon;
+		satchelIcon, medkitIcon, ammoIcon, mp40Icon, thompsonIcon, stenIcon, fg42Icon,
+		mp34Icon;
 
 	qhandle_t cursorIcon, checkboxChecked, checkboxUnchecked;
 };

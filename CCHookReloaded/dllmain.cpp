@@ -60,6 +60,7 @@ struct SItemModelIndices
     int thompson;
     int sten;
     int fg42;
+	int mp34;
 };
 
 static std::unordered_map<EMod, SItemModelIndices> g_modItemIndices;
@@ -82,13 +83,13 @@ EMod InitializeMod()
         g_modItemIndices[EMod::EtMain] = { 2, 36, 20, 13, 15, 47 };
 
         // Use -1 as a placeholder for unknown indices
-        g_modItemIndices[EMod::JayMod]    = { /*medkit*/3, /*ammo*/39, /*mp40*/22, /*thompson*/14, /*sten*/18, /*fg42*/49 };
-        g_modItemIndices[EMod::NoQuarter] = { /*medkit*/17, /*ammo*/46, /*mp40*/22, /*thompson*/27, /*sten*/28, /*fg42*/78 }; // NoQuarter replaced the fg42 with the BAR
-        g_modItemIndices[EMod::Silent]    = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44 };
-        g_modItemIndices[EMod::Nitmod]    = { /*medkit*/2, /*ammo*/32, /*mp40*/18, /*thompson*/12, /*sten*/14, /*fg42*/44 };
-        g_modItemIndices[EMod::Legacy]    = { /*medkit*/2, /*ammo*/36, /*mp40*/20, /*thompson*/13, /*sten*/15, /*fg42*/47 };
-        g_modItemIndices[EMod::EtPub]     = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44 };
-        g_modItemIndices[EMod::EtPro]     = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44 };
+        g_modItemIndices[EMod::JayMod]    = { /*medkit*/3, /*ammo*/39, /*mp40*/22, /*thompson*/14, /*sten*/18, /*fg42*/49, -1 };
+        g_modItemIndices[EMod::NoQuarter] = { /*medkit*/17, /*ammo*/46, /*mp40*/22, /*thompson*/27, /*sten*/28, /*fg42*/78, -1 };  // NoQuarter replaced the fg42 with the BAR
+        g_modItemIndices[EMod::Silent]    = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44, -1 };
+        g_modItemIndices[EMod::Nitmod]    = { /*medkit*/2, /*ammo*/32, /*mp40*/18, /*thompson*/12, /*sten*/14, /*fg42*/44, -1 };
+        g_modItemIndices[EMod::Legacy]    = { /*medkit*/2, /*ammo*/36, /*mp40*/20, /*thompson*/13, /*sten*/15, /*fg42*/47, /*mp34*/16 };
+        g_modItemIndices[EMod::EtPub]     = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44, -1 };
+        g_modItemIndices[EMod::EtPro]     = { /*medkit*/3, /*ammo*/33, /*mp40*/19, /*thompson*/13, /*sten*/15, /*fg42*/44, -1 };
     }
 
 	char modName[MAX_PATH+1];
@@ -136,8 +137,9 @@ EMod InitializeMod()
 	media.pickupModels[6] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/mp40/mp40.md3"));
 	media.pickupModels[7] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/thompson/thompson.md3"));
 	media.pickupModels[8] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/sten/sten.md3"));
-	media.pickupModels[9] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/fg42/fg42.md3"));
-	media.pickupModels[10] = DoSyscall(CG_R_REGISTERMODEL, XorString("models/multiplayer/mauser/mauser_pickup.md3"));
+	media.pickupModels[9] =  DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/mp34/mp34_pickup.md3"));
+	media.pickupModels[10] = DoSyscall(CG_R_REGISTERMODEL, XorString("models/weapons2/fg42/fg42.md3"));
+	media.pickupModels[11] = DoSyscall(CG_R_REGISTERMODEL, XorString("models/multiplayer/mauser/mauser_pickup.md3"));
 
     media.coverShader = ShaderSystem::GetShader("cover", spoofSeed);
     media.plainShader = ShaderSystem::GetShader("plain", spoofSeed);
@@ -232,6 +234,7 @@ EMod InitializeMod()
 	media.thompsonIcon = DoSyscall(CG_R_REGISTERSHADER, XorString("icons/iconw_thompson_1_select.tga"));
 	media.stenIcon = DoSyscall(CG_R_REGISTERSHADER, XorString("icons/iconw_sten_1_select.tga"));
 	media.fg42Icon = DoSyscall(CG_R_REGISTERSHADER, XorString("icons/iconw_fg42_1_select.tga"));
+	media.mp34Icon = DoSyscall(CG_R_REGISTERSHADER, XorString("icons/iconw_mp34_1_select"));
 	media.cursorIcon = DoSyscall(CG_R_REGISTERSHADER, XorString("ui/assets/3_cursor3.tga"));
 	media.checkboxChecked = DoSyscall(CG_R_REGISTERSHADER, XorString("ui/assets/check.tga"));
 	media.checkboxUnchecked = DoSyscall(CG_R_REGISTERSHADER, XorString("ui/assets/check_not.tga"));
@@ -659,7 +662,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 			// Layer 1 (Fill)
 			if (cfg.weaponshader1)
 			{
-				if (cfg.weaponChamsShader1Wallhack)
+				if (cfg.weaponChamsShader1Wallhack && cfg.wallhack)
 				{
 					chamsEnt.renderfx |= RF_DEPTHHACK;
 				}
@@ -668,14 +671,14 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 					chamsEnt.renderfx &= ~RF_DEPTHHACK;
 				}
 				chamsEnt.customShader = cfg.weaponshader1;
-				Vector4Copy(cfg.colorTeamWeapon, chamsEnt.shaderRGBA);
+				Vector4Copy(cfg.colorHeldWeapon, chamsEnt.shaderRGBA);
 				DoSyscall(CG_R_ADDREFENTITYTOSCENE, &chamsEnt);
 			}
 
 			// Layer 2 (Outline)
 			if (cfg.weaponshader2)
 			{
-				if (cfg.weaponChamsShader2Wallhack)
+				if (cfg.weaponChamsShader2Wallhack && cfg.wallhack)
 				{
 					chamsEnt.renderfx |= RF_DEPTHHACK;
 				}
@@ -684,7 +687,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 					chamsEnt.renderfx &= ~RF_DEPTHHACK;
 				}
 				chamsEnt.customShader = cfg.weaponshader2;
-				Vector4Copy(cfg.colorTeamWeaponOutline, chamsEnt.shaderRGBA);
+				Vector4Copy(cfg.colorHeldWeaponOutline, chamsEnt.shaderRGBA);
 				return DoSyscall(CG_R_ADDREFENTITYTOSCENE, &chamsEnt);
 			}
 			return 0;
@@ -701,7 +704,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 		{
 			// Layer 1 (Fill)
 			refEntity_t fillEnt = ent;
-			if (cfg.pickupChamsFillWallhack)
+			if (cfg.pickupChamsFillWallhack && cfg.wallhack)
 			{
 				fillEnt.renderfx |= RF_DEPTHHACK;
 			}
@@ -719,7 +722,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 			// Layer 2 (Outline)
 			if (cfg.pickupChamsOutline) 
 			{
-				if (cfg.pickupChamsOutlineWallhack)
+				if (cfg.pickupChamsOutlineWallhack && cfg.wallhack)
 				{
 					ent.renderfx |= RF_DEPTHHACK;
 				}
@@ -744,7 +747,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 		{
 			// Layer 1 (Fill)
 			refEntity_t fillEnt = ent;
-			if (cfg.droppedWeaponChamsFillWallhack)
+			if (cfg.droppedWeaponChamsFillWallhack && cfg.wallhack)
 			{
 				fillEnt.renderfx |= RF_DEPTHHACK;
 			}
@@ -761,7 +764,7 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 			// Layer 2 (Outline)
 			if (cfg.droppedWeaponChamsOutline) 
 			{
-				if (cfg.droppedWeaponChamsOutlineWallhack)
+				if (cfg.droppedWeaponChamsOutlineWallhack && cfg.wallhack)
 				{
 					ent.renderfx |= RF_DEPTHHACK;
 				}
@@ -794,48 +797,91 @@ intptr_t hooked_CL_CgameSystemCalls(intptr_t *args)
 			}
 		}
 
-		if (cfg.playerChams)
+		if (ent.entityNum >= 0 && ent.entityNum < MAX_CLIENTS)
 		{
-			if (!(ent.renderfx & RF_LIGHTING_ORIGIN) ||
-				ent.renderfx & (RF_DEPTHHACK | RF_NOSHADOW))
-				break;
-			if (!ent.customSkin)
-				break;
-			if (ent.entityNum < 0 || ent.entityNum >= MAX_CLIENTS)
-				break;
-
 			auto& ci = cgs_clientinfo[ent.entityNum];
-			if (!ci.valid)
-				break;
-			if (ci.teamNum == cgs_clientinfo[cg_snapshot.ps.clientNum].teamNum)
-				break;
+			auto& localClient = cgs_clientinfo[cg_snapshot.ps.clientNum];
 
-			if (ci.flags & EF_DEAD)
+			if (ci.valid && ci.id != localClient.id)
 			{
-				if (cfg.playerCorpseChams)
+				if (cfg.playerChams && !(ent.renderfx & RF_FIRST_PERSON) && !(ci.flags & EF_DEAD) && (ent.renderfx & RF_LIGHTING_ORIGIN))
 				{
-					DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+					if (ci.flags & EF_DEAD)
+					{
+						if (cfg.playerCorpseChams)
+						{
+							DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+							ent.shaderRGBA[3] = 255;
+							ent.customShader = media.onFireShader;
+						}
+						else
+						{
+							break;
+						}
+					}
 
-					ent.shaderRGBA[3] = 255;
-					ent.customShader = media.onFireShader;
+					bool isFriendly = (ci.teamNum == localClient.teamNum);
+					bool isVisible = eng::IsPointVisible(cg_refdef.vieworg, ent.origin, cg_snapshot.ps.clientNum);
+
+					if (isFriendly)
+					{
+						if (cfg.teamShader1Wallhack && cfg.wallhack)
+							ent.renderfx |= RF_DEPTHHACK;
+
+						if (cfg.teamShader1)
+						{
+							ent.customShader = cfg.teamShader1;
+							if (ci.invuln)
+								Vector4Copy(cfg.colorInvulnerable, ent.shaderRGBA);
+							else
+								Vector4Copy(isVisible ? cfg.colorTeam : cfg.colorTeamHidden, ent.shaderRGBA);
+							ent.shaderRGBA[3] = 255;
+						}
+
+						DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+
+						if (cfg.teamShader2Wallhack && cfg.wallhack)
+							ent.renderfx |= RF_DEPTHHACK;
+						else
+							ent.renderfx &= ~RF_DEPTHHACK;
+
+						if (cfg.teamShader2)
+						{
+							ent.customShader = cfg.teamShader2;
+							Vector4Copy(cfg.colorTeamOut, ent.shaderRGBA);
+							ent.shaderRGBA[3] = 255;
+						}
+					}
+					else
+					{
+						if (cfg.enemyShader1Wallhack && cfg.wallhack)
+							ent.renderfx |= RF_DEPTHHACK;
+
+						if (cfg.enemyShader1)
+						{
+							ent.customShader = cfg.enemyShader1;
+							if (ci.invuln)
+								Vector4Copy(cfg.colorInvulnerable, ent.shaderRGBA);
+							else
+								Vector4Copy(isVisible ? cfg.colorEnemy : cfg.colorEnemyHidden, ent.shaderRGBA);
+							ent.shaderRGBA[3] = 255;
+						}
+
+						DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
+
+						if (cfg.enemyShader2Wallhack && cfg.wallhack)
+							ent.renderfx |= RF_DEPTHHACK;
+						else
+							ent.renderfx &= ~RF_DEPTHHACK;
+
+						if (cfg.enemyShader2)
+						{
+							ent.customShader = cfg.enemyShader2;
+							Vector4Copy(cfg.colorEnemyOut, ent.shaderRGBA);
+							ent.shaderRGBA[3] = 255;
+						}
+					}
 				}
-			}
-			else
-			{
-				if (cfg.playerOutlineChams)
-				{
-					ent.renderfx |= RF_DEPTHHACK | RF_NOSHADOW;
-					DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
-
-					ent.renderfx &= ~(RF_DEPTHHACK | RF_NOSHADOW);
-					ent.customShader = cfg.playerShader;
-					Vector4Copy(ci.invuln ? cfg.playerInvulnRGBA : cfg.playerVulnRGBA, ent.shaderRGBA);
-				}
-
-				DoSyscall(CG_R_ADDREFENTITYTOSCENE, &ent);
-
-				ent.customShader = cfg.playerShader;
-				Vector4Copy(ci.invuln ? cfg.playerInvulnRGBA : cfg.playerVulnRGBA, ent.shaderRGBA);
 			}
 		}
 		
@@ -1594,13 +1640,17 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 
 					const SItemModelIndices& indices = GetCurrentModIndices();
 
-					/*
+#ifdef USE_DEBUG
 					printf("Item found - Model Index: %d\n", ent.modelindex); 
+#endif
+					/*
+					Use this to find model indices for specific world models currently being rendered
+					For example if you drop a medpack or ammo pack on the ground and it becomes visible
+					the console will print its model index when that entity is sent to the renderer
 
-					Use this to find model indices for items, you must render the models you want the indices for in game
-					For example if you drop a medpack or ammopack on the ground you will see it print the indices in the console
-					It will always print ANY models from the modelindex that are currently being rendered from your pov
-					Make sure you define USE_DEBUG in pch.h first
+					Note:
+					- The printed modelindex corresponds to entries in the configstring table (CS_MODELS)
+					- Only entities that are within your current PVS (Potentially Visible Set) and being drawn will appear
 					*/
 
 				// Pickup items use the playerID for entityNum in ADDREFENTITYTOSCENE instead.
@@ -1614,6 +1664,8 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.thompsonIcon);
 				else if (ent.modelindex == indices.sten)
 					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.stenIcon);
+				else if (ent.modelindex == indices.mp34)
+					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.mp34Icon);
 				else if (ent.modelindex == indices.fg42)
 					ui::DrawIcon(x, y, 30.0f, 15.0f, cfg.iconEspColor, media.fg42Icon);
 			}
@@ -1633,6 +1685,11 @@ intptr_t __cdecl hooked_vmMain(intptr_t id, intptr_t a1, intptr_t a2, intptr_t a
 			}
 			else
 			{
+				if (!cfg.aimbotStickyAim)
+				{
+					g_aimTargetId = -1;
+				}
+
 				auto PredictAimPos = [](SClientInfo &ci, vec3_t aimPos) -> void {
 					// Velocity prediction 1 frame ahead
 					//VectorSubtract(aimPos, ci.interOrigin, aimPos);

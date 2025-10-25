@@ -10,17 +10,17 @@ struct SConfig
 	bool pickupChamsOutline = true;
 	bool pickupChamsOutlineWallhack = true;
 	vec4_t colorHealth = { 230, 0, 255, 255 };
-	vec4_t colorHealthOutline = { 255, 255, 255, 255 };
+	vec4_t colorHealthOutline = { 230, 0, 255, 255 };
 	vec4_t colorAmmo = { 0, 0, 255, 255 };
-	vec4_t colorAmmoOutline = { 255, 255, 255, 255 };
+	vec4_t colorAmmoOutline = { 0, 0, 255, 255 };
 
 	// Dropped Weapon Chams
 	bool droppedWeaponChams = true;
 	bool droppedWeaponChamsFillWallhack = false;
 	bool droppedWeaponChamsOutline = true;
 	bool droppedWeaponChamsOutlineWallhack = true;
-	vec4_t colorWorldWeapons = { 0, 255, 0, 255 };
-	vec4_t colorWorldWeaponsOutline = { 255, 255, 255, 255 };
+	vec4_t colorWorldWeapons = { 0, 0, 255, 255 };
+	vec4_t colorWorldWeaponsOutline = { 0, 0, 255, 255 };
 
 	qhandle_t& itemshader1 = media.glowChamsShader;
 	qhandle_t& itemshader2 = media.ocrystalShader;
@@ -30,20 +30,40 @@ struct SConfig
 	vec4_t missileVisRGBA = { 255, 0, 0, 0 };
 	vec4_t missileInvRGBA = {  80, 0, 0, 0 };
 
+	// Player Chams Wallhack Toggle
+	bool wallhack = true;
+
 	// Player Chams
 	bool playerChams = true;
-	bool playerOutlineChams = false;
 	bool playerCorpseChams = true;
-	vec4_t playerVulnRGBA   = { 255, 0, 0,   0 };
-	vec4_t playerInvulnRGBA = { 255, 0, 255, 0 };
-	qhandle_t& playerShader = media.coverShader;
+
+	// Team Player Chams
+	bool teamShader1Wallhack = true;
+	bool teamShader2Wallhack = true;
+	vec4_t colorTeam = { 0, 255, 0, 255 };
+	vec4_t colorTeamHidden = { 0, 100, 0, 255 };
+	vec4_t colorTeamOut = { 0, 0, 255, 255 };
+	qhandle_t& teamShader1 = media.glowChamsShader;
+	qhandle_t& teamShader2 = media.ocrystalShader;
+
+	// Enemy Player Chams
+	bool enemyShader1Wallhack = true;
+	bool enemyShader2Wallhack = true;
+	vec4_t colorEnemy = { 255, 0, 0, 255 };
+	vec4_t colorEnemyHidden = { 100, 0, 0, 255 };
+	vec4_t colorEnemyOut = { 255, 0, 255, 255 };
+	qhandle_t& enemyShader1 = media.glowChamsShader;
+	qhandle_t& enemyShader2 = media.ocrystalShader;
+
+	// Shared Player Chams Color
+	vec4_t colorInvulnerable = { 255, 255, 0, 255 };
 
 	// Held Weapon Chams
 	bool heldWeaponChams = true;
 	bool weaponChamsShader1Wallhack = false;
 	bool weaponChamsShader2Wallhack = true;
-	vec4_t colorTeamWeapon = { 255, 255, 0, 255 };
-	vec4_t colorTeamWeaponOutline = { 0, 255, 255, 255 };
+	vec4_t colorHeldWeapon = { 255, 255, 0, 255 };
+	vec4_t colorHeldWeaponOutline = { 0, 255, 255, 255 };
 	qhandle_t& weaponshader1 = media.glowChamsShader;
 	qhandle_t& weaponshader2 = media.ocrystalShader;
 
@@ -89,7 +109,7 @@ struct SConfig
 	float aimbotBodyBoxTraceStep = 0.3f;
 	float aimbotHeadHeightOffset = 0.0f; // -5.0f aims roughly at the neck
 	bool aimbotAutoCrouch = true;
-	float aimbotAutoCrouchOffset = 21.0f;
+	float aimbotAutoCrouchOffset = 24.0f; // 24 seems to be the best for most maps (depends on the map and your positioning)
 
 
 	// Spoofer

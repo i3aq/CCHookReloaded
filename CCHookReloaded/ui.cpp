@@ -388,10 +388,16 @@ namespace ui
 				break;
 			case 1: // Visuals
 				{
-					const float column2X = contentX + 250.0f;
+					const float column2X = contentX + 180.0f;
+					const float column3X = contentX + 370.0f;
+					const float indent2X = column2X + 15.0f;
+					const float indent3X = column3X + 15.0f;
+
 					float currentY_col1 = contentY;
 					float currentY_col2 = contentY;
+					float currentY_col3 = contentY;
 
+					// Left column
 					DrawCheckbox(contentX, currentY_col1, XorString("No Scope-FoV"), &cfg.noScopeFov, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("No Scope-Blackout"), &cfg.noScopeBlackout, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("Bullet Tracers"), &cfg.bulletTracers, checkboxScale); currentY_col1 += verticalSpacing;
@@ -401,23 +407,32 @@ namespace ui
 					DrawCheckbox(contentX, currentY_col1, XorString("No Smoke"), &cfg.noSmoke, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("No Foliage"), &cfg.noFoliage, checkboxScale); currentY_col1 += verticalSpacing;
 					DrawCheckbox(contentX, currentY_col1, XorString("No Weather"), &cfg.noWeather, checkboxScale); currentY_col1 += verticalSpacing;
-					DrawCheckbox(contentX, currentY_col1, XorString("Missile Chams"), &cfg.missileChams, checkboxScale);
-					
+					DrawCheckbox(contentX, currentY_col1, XorString("Missile Chams"), &cfg.missileChams, checkboxScale); currentY_col1 += verticalSpacing;
+
+					// Middle column
+					DrawCheckbox(column2X, currentY_col2, XorString("Master Wallhack"), &cfg.wallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
+
 					DrawCheckbox(column2X, currentY_col2, XorString("Player Chams"), &cfg.playerChams, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline"), &cfg.playerOutlineChams, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Corpse"), &cfg.playerCorpseChams, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
-					
-					DrawCheckbox(column2X, currentY_col2, XorString("Pickup Chams"), &cfg.pickupChams, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Fill Wallhack"), &cfg.pickupChamsFillWallhack, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline"), &cfg.pickupChamsOutline, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline Wallhack"), &cfg.pickupChamsOutlineWallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Corpse Chams"), &cfg.playerCorpseChams, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Team Fill Wallhack"), &cfg.teamShader1Wallhack, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Team Outline Wallhack"), &cfg.teamShader2Wallhack, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Enemy Fill Wallhack"), &cfg.enemyShader1Wallhack, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Enemy Outline Wallhack"), &cfg.enemyShader2Wallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
 
-					DrawCheckbox(column2X, currentY_col2, XorString("Dropped Wep Chams"), &cfg.droppedWeaponChams, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Fill Wallhack"), &cfg.droppedWeaponChamsFillWallhack, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline"), &cfg.droppedWeaponChamsOutline, checkboxScale); currentY_col2 += verticalSpacing;
-					DrawCheckbox(column2X + 15.0f, currentY_col2, XorString("Outline Wallhack"), &cfg.droppedWeaponChamsOutlineWallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
+					DrawCheckbox(column2X, currentY_col2, XorString("Held Weapon Chams"), &cfg.heldWeaponChams, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Fill Wallhack"), &cfg.weaponChamsShader1Wallhack, checkboxScale); currentY_col2 += verticalSpacing;
+					DrawCheckbox(indent2X, currentY_col2, XorString("Outline Wallhack"), &cfg.weaponChamsShader2Wallhack, checkboxScale); currentY_col2 += verticalSpacing * 1.5f;
 
-					DrawCheckbox(column2X, currentY_col2, XorString("Held Weapon Chams"), &cfg.heldWeaponChams, checkboxScale);
+					// Right column
+					DrawCheckbox(column3X, currentY_col3, XorString("Pickup Chams"), &cfg.pickupChams, checkboxScale); currentY_col3 += verticalSpacing;
+					DrawCheckbox(indent3X, currentY_col3, XorString("Fill Wallhack"), &cfg.pickupChamsFillWallhack, checkboxScale); currentY_col3 += verticalSpacing;
+					DrawCheckbox(indent3X, currentY_col3, XorString("Outline"), &cfg.pickupChamsOutline, checkboxScale); currentY_col3 += verticalSpacing;
+					DrawCheckbox(indent3X, currentY_col3, XorString("Outline Wallhack"), &cfg.pickupChamsOutlineWallhack, checkboxScale); currentY_col3 += verticalSpacing * 1.5f;
+
+					DrawCheckbox(column3X, currentY_col3, XorString("Dropped Wep Chams"), &cfg.droppedWeaponChams, checkboxScale); currentY_col3 += verticalSpacing;
+					DrawCheckbox(indent3X, currentY_col3, XorString("Fill Wallhack"), &cfg.droppedWeaponChamsFillWallhack, checkboxScale); currentY_col3 += verticalSpacing;
+					DrawCheckbox(indent3X, currentY_col3, XorString("Outline"), &cfg.droppedWeaponChamsOutline, checkboxScale); currentY_col3 += verticalSpacing;
+					DrawCheckbox(indent3X, currentY_col3, XorString("Outline Wallhack"), &cfg.droppedWeaponChamsOutlineWallhack, checkboxScale);
 				}
 				break;
 			case 2: // ESP
